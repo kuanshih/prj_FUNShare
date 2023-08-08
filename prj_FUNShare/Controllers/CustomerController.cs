@@ -8,8 +8,8 @@ namespace prj_FUNShare.Controllers
     {
         public IActionResult PocketList(int? id)
         {
-             FunshareContext db = new FunshareContext();
-            IEnumerable<Product> datas = db.Products.Where(p => p.PocketLists.FirstOrDefault().MemberId ==id);
+             FUNShareContext db = new FUNShareContext();
+            IEnumerable<Product> datas = db.Product.Where(p => p.PocketList.FirstOrDefault().MemberId ==id);
             return View(datas);
         }
         public IActionResult myOrder()

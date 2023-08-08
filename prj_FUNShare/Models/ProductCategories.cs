@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 namespace prj_FUNShare.Models;
 
-public partial class AchievementList
+public partial class ProductCategories
 {
-    public int AchievementListId { get; set; }
+    public int ProductCategoryId { get; set; }
 
     public int ProductId { get; set; }
 
-    public int AchievementId { get; set; }
-
-    public virtual Achievement Achievement { get; set; }
+    public int SubCategoryId { get; set; }
 
     public virtual Product Product { get; set; }
+
+    public virtual SubCategory SubCategory { get; set; }
 }
