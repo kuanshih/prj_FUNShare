@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using prj_FUNShare.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<FUNShareContext>(
+    option => option.UseSqlServer(builder.Configuration.GetConnectionString("FUNShareConnection")));
 
 var app = builder.Build();
 

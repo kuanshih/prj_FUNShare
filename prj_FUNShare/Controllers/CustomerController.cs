@@ -6,19 +6,28 @@ namespace prj_FUNShare.Controllers
 {
     public class CustomerController : Controller
     {
+        private readonly FUNShareContext _context;
+        public CustomerController(FUNShareContext context)
+        {
+            _context = context;
+        }
         public IActionResult PocketList(int? id)
         {
             FUNShareContext db = new FUNShareContext();
             IEnumerable<Product> datas = db.Product.Where(p => p.PocketList.FirstOrDefault().MemberId ==id);
             return View(datas);
         }
-        public IActionResult myOrder(int? id)
+        public  IActionResult myOrder()
         {
-            return View();
+
+            var datas = _context.Product.Include(p => p.PocketList).Include(p => p.ImageList);
+            return View(datas);
         }
         public IActionResult myCoupon()
         {
-            return View();
+            var datas = from i in _context.CouponList
+                        select i;
+            return View(datas);
         }
         public IActionResult myPoint()
         {
