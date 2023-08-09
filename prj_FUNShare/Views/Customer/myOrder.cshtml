@@ -16,28 +16,45 @@
     <thead>
         <tr>
             <th>
-                序
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrderDetail)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Bonus)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Member)
+                @Html.DisplayNameFor(model => model.TaxId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Coupon)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-
+        @{
+            foreach( var item in Model)
+            {
+                <tr>
+                    <th>
+                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(modelitem => item.OrderTime)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(modelitem => item.TaxId)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(modelitem => item.StatusId)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(modelitem => item.Coupon)
+                    </th>
+                </tr>
+            }
+        }
     </tbody>
     </table>
 <h2>過去的體驗課程</h2>
