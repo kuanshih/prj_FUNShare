@@ -6,7 +6,51 @@
 
 <h1>我的收藏</h1>
 <div>
-
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductIntro)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductCategories)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductDetail.FirstOrDefault().UnitPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status.Description)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model)
+                {
+                        <tr>
+                            <th>
+                                @Html.DisplayFor(modelitem => item.ProductName)
+                            </th>
+                            <th>
+                            @Html.DisplayFor(modelitem => item.ProductIntro)
+                            </th>
+                            <th>
+                            @Html.DisplayFor(modelitem => item.ProductCategories.FirstOrDefault().SubCategory.Category.CategoryName)
+                            </th>
+                            <th>
+                            @Html.DisplayFor(modelitem => item.ProductDetail.FirstOrDefault().UnitPrice)
+                            </th>
+                            <th>
+                            @Html.DisplayFor(modelitem => item.Status.Description)
+                            </th>
+                        </tr>
+                }
+            }
+        </tbody>
+    </table>
 </div>
 
 

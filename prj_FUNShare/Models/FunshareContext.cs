@@ -521,9 +521,7 @@ public partial class FUNShareContext : DbContext
 
             entity.ToTable("Pocket_List");
 
-            entity.Property(e => e.PocketlistId)
-                .ValueGeneratedNever()
-                .HasColumnName("Pocketlist_ID");
+            entity.Property(e => e.PocketlistId).HasColumnName("Pocketlist_ID");
             entity.Property(e => e.MemberId).HasColumnName("Member_ID");
             entity.Property(e => e.ProductId).HasColumnName("Product_ID");
 
@@ -558,6 +556,11 @@ public partial class FUNShareContext : DbContext
             entity.HasOne(d => d.Interval).WithMany(p => p.Product)
                 .HasForeignKey(d => d.IntervalId)
                 .HasConstraintName("FK_Product_Interval_List");
+
+            entity.HasOne(d => d.Status).WithMany(p => p.Product)
+                .HasForeignKey(d => d.StatusId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Product_Status");
 
             entity.HasOne(d => d.Supplier).WithMany(p => p.Product)
                 .HasForeignKey(d => d.SupplierId)

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using prj_FUNShare.Models;
 using System.Globalization;
+using System.Security.Cryptography;
 
 namespace prj_FUNShare.Controllers
 {
@@ -14,23 +15,32 @@ namespace prj_FUNShare.Controllers
             _context = context;
             _id = memberId;
         }
-        public IActionResult PocketList(int? id)
+        public IActionResult PocketList()
         {
-            IEnumerable<Product> datas = _context.Product.Where(p => p.PocketList.FirstOrDefault().MemberId ==id);
+            var datas = from p in _context.Product.Where(p => p.PocketList.FirstOrDefault().MemberId == _id)
+                                .Include(p=>p.Status)
+                                .Include(p => p.ProductDetail)
+                                .ThenInclude(pp=>pp.OrderDetail)
+                                .Include(p => p.Supplier)
+                                .Include(p=>p.ImageList)
+                                .Include(p => p.ProductCategories)
+                                .ThenInclude(pp=>pp.SubCategory)
+                                .ThenInclude(pp=>pp.Category)
+                        select p;
             return View(datas);
         }
         public  IActionResult myOrder()
         {
             var datas = from o in _context.Order.Where(p => p.MemberId == _id)
-                        .Include(c => c.OrderDetail)
-                        .ThenInclude(ca => ca.ProductDetail)
-                        .ThenInclude(cak => cak.Product)
-                        .ThenInclude(cake => cake.Supplier)
+                        .Include(p => p.OrderDetail)
+                        .ThenInclude(pp => pp.ProductDetail)
+                        .ThenInclude(ppp => ppp.Product)
+                        .ThenInclude(pppp => pppp.Supplier)
 
-                         .Include(c => c.OrderDetail)
-                        .ThenInclude(cc=>cc.Status)
+                         .Include(p => p.OrderDetail)
+                        .ThenInclude(pp=>pp.Status)
 
-                        .Include(cc => cc.Status)
+                        .Include(p => p.Status)
                         orderby o.OrderDetail.First().ProductDetail.BeginTime descending
                         select o;
                         return View(datas);
@@ -47,9 +57,13 @@ namespace prj_FUNShare.Controllers
                         select b;
             return View(datas);
         }
-        public IActionResult myAccount()
+        public IActionResult AccountEdit(int? id=8)
         {
-            return View();
+            var datas = from c in _context.CustomerInfomation.Where(p=>p.MemberId==id)
+                select c;
+            CustomerInfomation member = datas.FirstOrDefault();
+                        
+            return View(member);
         }
     }
 }

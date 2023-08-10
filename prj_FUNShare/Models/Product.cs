@@ -53,5 +53,7 @@ public partial class Product
 
     public virtual ICollection<ProductDetail> ProductDetail { get; set; } = new List<ProductDetail>();
 
+    public virtual Status Status { get; set; }
+
     public virtual Supplier Supplier { get; set; }
 }

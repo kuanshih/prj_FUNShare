@@ -19,6 +19,8 @@ public partial class Status
 
     public virtual ICollection<OrderDetail> OrderDetail { get; set; } = new List<OrderDetail>();
 
+    public virtual ICollection<Product> Product { get; set; } = new List<Product>();
+
     public virtual ICollection<ProductDetail> ProductDetail { get; set; } = new List<ProductDetail>();
 
     public virtual ICollection<Supplier> Supplier { get; set; } = new List<Supplier>();
