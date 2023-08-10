@@ -41,13 +41,13 @@
                         @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
                     </th>
                     <th>
+                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
+                    </th>
+                    <th>
                         @Html.DisplayFor(modelitem => item.OrderTime)
                     </th>
                     <th>
-                        @Html.DisplayFor(modelitem => item.TaxId)
-                    </th>
-                    <th>
-                        @Html.DisplayFor(modelitem => item.StatusId)
+                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
                     </th>
                     <th>
                         @Html.DisplayFor(modelitem => item.Coupon)
@@ -57,8 +57,9 @@
         }
     </tbody>
     </table>
-<h2>過去的體驗課程</h2>
 
+
+<h2>過去的體驗課程</h2>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -89,8 +90,10 @@
     <tbody>
     </tbody>
 </table>
-<h2>取消的體驗課程</h2>
 
+
+
+<h2>取消的體驗課程</h2>
 <p>
     <a asp-action="Create">Create New</a>
 </p>

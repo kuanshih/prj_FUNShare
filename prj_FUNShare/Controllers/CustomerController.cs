@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using prj_FUNShare.Models;
+using System.Globalization;
 
 namespace prj_FUNShare.Controllers
 {
@@ -29,6 +30,7 @@ namespace prj_FUNShare.Controllers
                         .Include(c => c.OrderDetail)
                         .ThenInclude(ca => ca.ProductDetail)
                         .ThenInclude(cak=>cak.Product)
+                        .ThenInclude(cake => cake.)
                         select o;
                         return View(datas);
         }
