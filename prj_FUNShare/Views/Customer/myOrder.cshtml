@@ -10,7 +10,7 @@
 <h2>未來的體驗課程</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+
 </p>
 <table class="table">
     <thead>
@@ -19,16 +19,19 @@
                 @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bonus)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TaxId)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.BeginTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StatusId)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Coupon)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().Status.Description)
             </th>
         </tr>
     </thead>
@@ -36,58 +39,99 @@
         @{
             foreach( var item in Model)
             {
-                <tr>
-                    <th>
+                var orderDetail = item.OrderDetail.FirstOrDefault();
+                if (orderDetail != null && orderDetail.ProductDetail.BeginTime >= DateTime.Today.AddYears(-1)) //這邊等資料庫有未來資料時須修改
+                {
+                    <tr>
+                        <th>
                         @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
                     </th>
                     <th>
+                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.BeginTime)
+                    </th>
+                    <th>
                         @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
                     </th>
                     <th>
-                        @Html.DisplayFor(modelitem => item.OrderTime)
+                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Address)
                     </th>
                     <th>
-                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
-                    </th>
-                    <th>
-                        @Html.DisplayFor(modelitem => item.Coupon)
+                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().Status.Description)
                     </th>
                 </tr>
+                }
             }
         }
     </tbody>
     </table>
 
+    @section Scripts{
+        <script>
+            
+
+        </script>
+    }
 
 <h2>過去的體驗課程</h2>
 <p>
-    <a asp-action="Create">Create New</a>
+
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                序
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderDetail)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bonus)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.BeginTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Member)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Coupon)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().Status.Description)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
+        @{
+            foreach (var item in Model)
+            {
+                var orderDetail = item.OrderDetail.FirstOrDefault();
+                if (orderDetail != null && orderDetail.ProductDetail.BeginTime <= DateTime.Today.AddYears(-1)) //這邊等資料庫有未來資料時須修改
+                {
+                    <tr>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.BeginTime)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Address)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().Status.Description)
+                        </th>
+                    </tr>
+                }
+            }
+        }
     </tbody>
 </table>
 
@@ -95,33 +139,61 @@
 
 <h2>取消的體驗課程</h2>
 <p>
-    <a asp-action="Create">Create New</a>
+
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                序
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderDetail)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bonus)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.BeginTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Member)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Coupon)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().ProductDetail.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().Order.Status.Description)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
+        @{
+            foreach (var item in Model)
+            {
+                var orderDetail = item.OrderDetail.FirstOrDefault();
+                if (orderDetail != null && /*orderDetail.ProductDetail.BeginTime <= DateTime.Today.AddYears(-1) &&*/ orderDetail.Order.StatusId ==6) //這邊等資料庫有未來資料時須修改
+                {
+                    <tr>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.BeginTime)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Address)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().Order.Status.Description)
+                        </th>
+                    </tr>
+                }
+            }
+        }
     </tbody>
 </table>
 @*<div class="p-5 text-center bg-light mb-5">

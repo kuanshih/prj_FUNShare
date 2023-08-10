@@ -16,21 +16,22 @@ namespace prj_FUNShare.Controllers
         }
         public IActionResult PocketList(int? id)
         {
-            FUNShareContext db = new FUNShareContext();
-            IEnumerable<Product> datas = db.Product.Where(p => p.PocketList.FirstOrDefault().MemberId ==id);
+            IEnumerable<Product> datas = _context.Product.Where(p => p.PocketList.FirstOrDefault().MemberId ==id);
             return View(datas);
         }
         public  IActionResult myOrder()
         {
-
-            //var datas = from i in _context.Order.Where(p => p.MemberId == _id)
-            //            from p in _context.Product.Where(p=>p.ProductDetail.First().OrderDetail.First().MemberId==_id)
-            //            select new {p.ProductName, p.ProductIntro, i.OrderDetail.First().Member };
             var datas = from o in _context.Order.Where(p => p.MemberId == _id)
                         .Include(c => c.OrderDetail)
                         .ThenInclude(ca => ca.ProductDetail)
-                        .ThenInclude(cak=>cak.Product)
-                        .ThenInclude(cake => cake.)
+                        .ThenInclude(cak => cak.Product)
+                        .ThenInclude(cake => cake.Supplier)
+
+                         .Include(c => c.OrderDetail)
+                        .ThenInclude(cc=>cc.Status)
+
+                        .Include(cc => cc.Status)
+                        orderby o.OrderDetail.First().ProductDetail.BeginTime descending
                         select o;
                         return View(datas);
         }
@@ -42,7 +43,9 @@ namespace prj_FUNShare.Controllers
         }
         public IActionResult myPoint()
         {
-            return View();
+            var datas = from b in _context.Bonus.Where(p =>p.MemberId == _id)
+                        select b;
+            return View(datas);
         }
         public IActionResult myAccount()
         {

@@ -52,4 +52,6 @@ public partial class Product
     public virtual ICollection<ProductCategories> ProductCategories { get; set; } = new List<ProductCategories>();
 
     public virtual ICollection<ProductDetail> ProductDetail { get; set; } = new List<ProductDetail>();
+
+    public virtual Supplier Supplier { get; set; }
 }

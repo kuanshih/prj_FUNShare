@@ -39,5 +39,7 @@ public partial class Supplier
 
     public virtual City City { get; set; }
 
+    public virtual ICollection<Product> Product { get; set; } = new List<Product>();
+
     public virtual Status Status { get; set; }
 }

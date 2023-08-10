@@ -81,9 +81,8 @@ public partial class FUNShareContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                => optionsBuilder.UseSqlServer("Data Source=192.168.31.93;Initial Catalog=FUNShare;User ID=FUNShareDB;Password=987654321;Trust Server Certificate=True");
-    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-    //        => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=FUNShare;Integrated Security=True;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=192.168.31.93;Initial Catalog=FUNShare;User ID=FUNShareDB;Password=987654321;Trust Server Certificate=True");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Achievement>(entity =>
@@ -559,6 +558,11 @@ public partial class FUNShareContext : DbContext
             entity.HasOne(d => d.Interval).WithMany(p => p.Product)
                 .HasForeignKey(d => d.IntervalId)
                 .HasConstraintName("FK_Product_Interval_List");
+
+            entity.HasOne(d => d.Supplier).WithMany(p => p.Product)
+                .HasForeignKey(d => d.SupplierId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Product_Supplier");
         });
 
         modelBuilder.Entity<ProductCategories>(entity =>
