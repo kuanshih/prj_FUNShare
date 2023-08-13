@@ -7,7 +7,7 @@
 <h1>我的優惠券</h1>
 
 
-<table class="table">
+<table class="table table-hover table-striped">
     <thead>
         <tr>
             <th>
@@ -23,7 +23,7 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Order.FirstOrDefault().OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
+            @*    @Html.DisplayNameFor(model => model.Order.FirstOrDefault().OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)*@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DueDate)
@@ -50,16 +50,12 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Order.FirstOrDefault().OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
+
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DueDate)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
+
         </tr>
 }}
     </tbody>

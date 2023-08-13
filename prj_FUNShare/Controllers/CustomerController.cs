@@ -25,7 +25,10 @@ namespace prj_FUNShare.Controllers
                                 .Include(p=>p.ImageList)
                                 .Include(p => p.ProductCategories)
                                 .ThenInclude(pp=>pp.SubCategory)
-                                .ThenInclude(pp=>pp.Category)
+                                .ThenInclude(ppp=>ppp.Category)
+                                .Include(p=>p.ProductDetail)
+                                .ThenInclude(pp=>pp.District)
+                                .ThenInclude(ppp=>ppp.City)
                         select p;
             return View(datas);
         }

@@ -6,15 +6,13 @@
 
 <h1>我的紅利</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <div>
     <h5 id="total">
         會員紅利累積: 
     </h5>
 </div>
-<table class="table">
+<table class="table table-hover table-striped">
     <thead>
         <tr>
             <th>
@@ -47,11 +45,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
-            <td>
+@*            <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
+            </td>*@
         </tr>
 }
     </tbody>
