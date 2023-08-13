@@ -4,19 +4,21 @@
     ViewData["Title"] = "myPoint";
 }
 
-<h1>myPoint</h1>
+<h1>我的紅利</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<div>
+    <h5 id="total">
+        會員紅利累積: 
+    </h5>
+</div>
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.PointsId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MemberId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Points)
@@ -37,9 +39,6 @@
                 @Html.DisplayFor(modelItem => item.PointsId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MemberId)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Points)
             </td>
             <td>
@@ -57,3 +56,26 @@
 }
     </tbody>
 </table>
+
+@section Styles{
+    <style>
+
+</style>
+}
+
+@section Scripts{
+    <script>
+
+        @{
+            int count = 0;
+            foreach (var item in Model)
+            {
+                count += (int)item.Points;
+            }
+        }
+            $(document).ready(function () {
+                $('#total').html("目前累積: "+ '@count'+" 點");
+            });
+
+    </script>
+}

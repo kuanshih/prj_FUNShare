@@ -18,7 +18,7 @@ namespace prj_FUNShare.Controllers
         public IActionResult PocketList()
         {
             var datas = from p in _context.Product.Where(p => p.PocketList.FirstOrDefault().MemberId == _id)
-                                .Include(p=>p.Status)
+                                //.Include(p=>p.Status)
                                 .Include(p => p.ProductDetail)
                                 .ThenInclude(pp=>pp.OrderDetail)
                                 .Include(p => p.Supplier)
@@ -41,6 +41,10 @@ namespace prj_FUNShare.Controllers
                         .ThenInclude(pp=>pp.Status)
 
                         .Include(p => p.Status)
+                        .Include(p => p.OrderDetail)
+                        .ThenInclude(pp => pp.ProductDetail)
+                        .ThenInclude(ppp => ppp.Product)
+                        .ThenInclude(pppp=>pppp.ImageList)
                         orderby o.OrderDetail.First().ProductDetail.BeginTime descending
                         select o;
                         return View(datas);
@@ -48,6 +52,10 @@ namespace prj_FUNShare.Controllers
         public IActionResult myCoupon()
         {
             var datas = from i in _context.CouponList
+                        .Include(p=>p.Order)
+                        .ThenInclude(p => p.OrderDetail)
+                        .ThenInclude(pp => pp.ProductDetail)
+                        .ThenInclude(ppp => ppp.Product)
                         select i;
             return View(datas);
         }

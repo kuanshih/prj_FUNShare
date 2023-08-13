@@ -12,7 +12,7 @@
 <p>
 
 </p>
-<table class="table">
+<table class="table table-hover table-striped">
     <thead>
         <tr>
             <th>
@@ -40,11 +40,14 @@
             foreach( var item in Model)
             {
                 var orderDetail = item.OrderDetail.FirstOrDefault();
-                if (orderDetail != null && orderDetail.ProductDetail.BeginTime >= DateTime.Today.AddYears(-1)) //這邊等資料庫有未來資料時須修改
+                if (orderDetail != null && orderDetail.ProductDetail.BeginTime >= DateTime.Today) //這邊等資料庫有未來資料時須修改
                 {
                     <tr>
                         <th>
                         @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
+                            <p>
+                                <img src="~/products/@item.OrderDetail.FirstOrDefault().ProductDetail.Product.ImageList.FirstOrDefault().ImagePath" width="250" height="160" />
+                            </p>
                     </th>
                     <th>
                         @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
@@ -79,7 +82,7 @@
 <p>
 
 </p>
-<table class="table">
+<table class=" table table-hover table-striped">
     <thead>
         <tr>
             <th>
@@ -107,11 +110,14 @@
             foreach (var item in Model)
             {
                 var orderDetail = item.OrderDetail.FirstOrDefault();
-                if (orderDetail != null && orderDetail.ProductDetail.BeginTime <= DateTime.Today.AddYears(-1)) //這邊等資料庫有未來資料時須修改
+                if (orderDetail != null && orderDetail.ProductDetail.BeginTime <= DateTime.Today) //這邊等資料庫有未來資料時須修改
                 {
                     <tr>
                         <th>
                             @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
+                            <p>
+                                <img src="~/products/@item.OrderDetail.FirstOrDefault().ProductDetail.Product.ImageList.FirstOrDefault().ImagePath" width="250" height="160" />
+                            </p>
                         </th>
                         <th>
                             @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
@@ -141,7 +147,7 @@
 <p>
 
 </p>
-<table class="table">
+<table class=" table table-hover table-striped">
     <thead>
         <tr>
             <th>
@@ -174,6 +180,9 @@
                     <tr>
                         <th>
                             @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
+                            <p>
+                                <img src="~/products/@item.OrderDetail.FirstOrDefault().ProductDetail.Product.ImageList.FirstOrDefault().ImagePath" width="250" height="160" />
+                            </p>
                         </th>
                         <th>
                             @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
@@ -196,7 +205,32 @@
         }
     </tbody>
 </table>
-@*<div class="p-5 text-center bg-light mb-5">
+
+<h2>正式版面設計</h2>
+HTML
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
+                 alt="Trendy Pants and Shoes"
+                 class="img-fluid rounded-start" />
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">
+                    This is a wider card with supporting text below as a natural lead-in to
+                    additional content. This content is a little bit longer.
+                </p>
+                <p class="card-text">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="p-5 text-center bg-light mb-5">
 </div>
 <div class="container">
     <div class="row">
@@ -268,6 +302,6 @@
         </div>
     </div>
 </div>
-<div class="card mb-5"/>*@
+<div class="card mb-5"/>
 
 
