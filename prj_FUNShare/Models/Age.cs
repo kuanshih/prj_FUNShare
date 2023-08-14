@@ -10,4 +10,6 @@ public partial class Age
     public int AgeId { get; set; }
 
     public string Grade { get; set; }
+
+    public virtual ICollection<Product> Product { get; set; } = new List<Product>();
 }

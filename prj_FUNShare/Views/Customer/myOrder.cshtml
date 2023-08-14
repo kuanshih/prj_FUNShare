@@ -12,6 +12,7 @@
 <p>
 
 </p>
+
 <table class="table table-hover table-striped">
     <thead>
         <tr>
@@ -33,55 +34,56 @@
             <th>
                 @Html.DisplayNameFor(model => model.OrderDetail.FirstOrDefault().Status.Description)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status.Description)
+            </th>
         </tr>
     </thead>
     <tbody>
         @{
             foreach( var item in Model)
             {
-                var orderDetail = item.OrderDetail.FirstOrDefault();
-                if (orderDetail != null && orderDetail.ProductDetail.BeginTime >= DateTime.Today) //這邊等資料庫有未來資料時須修改
+                var order = item;
+                if (order != null && item.StatusId != 6)
                 {
-                    <tr>
+                    var orderDetail = item.OrderDetail.FirstOrDefault();
+                    if (orderDetail != null && orderDetail.ProductDetail.BeginTime >= DateTime.Today) //這邊等資料庫有未來資料時須修改
+                    {
+                            <tr>
+                                <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
+                                <p>
+                                    <img src="~/products/@item.OrderDetail.FirstOrDefault().ProductDetail.Product.ImageList.FirstOrDefault().ImagePath" width="250" height="160" class="img-thumbnail" />
+                                </p>
+                        </th>
                         <th>
-                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
-                            <p>
-                                <img src="~/products/@item.OrderDetail.FirstOrDefault().ProductDetail.Product.ImageList.FirstOrDefault().ImagePath" width="250" height="160" />
-                            </p>
-                    </th>
-                    <th>
-                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
-                    </th>
-                    <th>
-                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.BeginTime)
-                    </th>
-                    <th>
-                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
-                    </th>
-                    <th>
-        
-                    </th>
-                    <th>
-                        @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().Status.Description)
-                    </th>
-                </tr>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.BeginTime)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
+                        </th>
+                        <th>
+            
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().Status.Description)
+                        </th>
+                            <th>
+                                @Html.DisplayFor(modelitem => item.Status.Description)
+                            </th>
+                    </tr>
+                }
                 }
             }
         }
     </tbody>
     </table>
 
-    @section Scripts{
-        <script>
-            
-
-        </script>
-    }
-
 <h2>過去的體驗課程</h2>
-<p>
 
-</p>
 <table class=" table table-hover table-striped">
     <thead>
         <tr>
@@ -112,41 +114,37 @@
                 var orderDetail = item.OrderDetail.FirstOrDefault();
                 if (orderDetail != null && orderDetail.ProductDetail.BeginTime <= DateTime.Today) //這邊等資料庫有未來資料時須修改
                 {
-                    <tr>
-                        <th>
-                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
-                            <p>
-                                <img src="~/products/@item.OrderDetail.FirstOrDefault().ProductDetail.Product.ImageList.FirstOrDefault().ImagePath" width="250" height="160" />
-                            </p>
-                        </th>
-                        <th>
-                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
-                        </th>
-                        <th>
-                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.BeginTime)
-                        </th>
-                        <th>
-                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
-                        </th>
-                        <th>
+                        <tr >
+                            <th>
+                                @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
+                                <p>
+                                    <img src="~/products/@item.OrderDetail.FirstOrDefault().ProductDetail.Product.ImageList.FirstOrDefault().ImagePath" width="250" height="160" class="img-thumbnail" />
+                                </p>
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.BeginTime)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
+                            </th>
+                            <th>
 
-                        </th>
-                        <th>
-                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().Status.Description)
-                        </th>
-                    </tr>
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().Status.Description)
+                            </th>
+                        </tr>
                 }
             }
         }
     </tbody>
 </table>
 
-
-
 <h2>取消的體驗課程</h2>
-<p>
 
-</p>
 <table class=" table table-hover table-striped">
     <thead>
         <tr>
@@ -175,36 +173,37 @@
             foreach (var item in Model)
             {
                 var orderDetail = item.OrderDetail.FirstOrDefault();
-                if (orderDetail != null && /*orderDetail.ProductDetail.BeginTime <= DateTime.Today.AddYears(-1) &&*/ orderDetail.Order.StatusId ==6) //這邊等資料庫有未來資料時須修改
+                if (orderDetail != null &&orderDetail.Order.StatusId ==6) //這邊等資料庫有未來資料時須修改
                 {
-                    <tr>
-                        <th>
-                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
-                            <p>
-                                <img src="~/products/@item.OrderDetail.FirstOrDefault().ProductDetail.Product.ImageList.FirstOrDefault().ImagePath" width="250" height="160" />
-                            </p>
-                        </th>
-                        <th>
-                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
-                        </th>
-                        <th>
-                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.BeginTime)
-                        </th>
-                        <th>
-                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
-                        </th>
-                        <th>
+                        <tr>
+                            <th>
+                                @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.ProductName)
+                                <p>
+                                    <img src="~/products/@item.OrderDetail.FirstOrDefault().ProductDetail.Product.ImageList.FirstOrDefault().ImagePath" width="250" height="160" class="img-thumbnail" />
+                                </p>
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.Product.Supplier.SupplierName)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.BeginTime)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().ProductDetail.UnitPrice)
+                            </th>
+                            <th>
 
-                        </th>
-                        <th>
-                            @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().Order.Status.Description)
-                        </th>
-                    </tr>
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelitem => item.OrderDetail.FirstOrDefault().Order.Status.Description)
+                            </th>
+                        </tr>
                 }
             }
         }
     </tbody>
 </table>
+
 
 <h2>正式版面設計</h2>
 HTML
@@ -304,4 +303,11 @@ HTML
 </div>
 <div class="card mb-5"/>
 
+@section Scripts{
+    <script>
+        // $(':th').click(function () {
+        //     $('#all').innerHTML = "";
+        // })
+    </script>
+}
 

@@ -4,19 +4,20 @@
     ViewData["Title"] = "myPoint";
 }
 
-<h1>我的紅利</h1>
+<h1 class="location=cneter">我的紅利</h1>
 
 
-<div>
+<div class="g-5">
     <h5 id="total">
         會員紅利累積: 
     </h5>
 </div>
+<div class="container-md">
 <table class="table table-hover table-striped">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PointsId)
+@*                 @Html.DisplayNameFor(model => model.PointsId) *@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Points)
@@ -34,7 +35,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.PointsId)
+@*                 @Html.DisplayFor(modelItem => item.PointsId) *@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Points)
@@ -54,6 +55,15 @@
 }
     </tbody>
 </table>
+</div>
+
+<div class="alert-info g-4">
+    <div class="Precautions__Title-u0x4ge-3 gsllmF">注意事項 :</div>
+    <div class="Precautions__StyleContent-u0x4ge-2 beyCDZ">1. 取消/更改訂單時，系統將自動歸還使用的紅利金，若歸還後的紅利金剛好逾期，FUNShare 將不另行通知。</div>
+    <div class="Precautions__StyleContent-u0x4ge-2 beyCDZ">2. 取消訂單時，若您不符合全額退款的條件，則 FUNShare 將優先退還紅利金再退現金。</div>
+    <div class="Precautions__StyleContent-u0x4ge-2 beyCDZ">3. 發票開立金額以消費者實際支付的金額為主。</div>
+</div>
+
 
 @section Styles{
     <style>

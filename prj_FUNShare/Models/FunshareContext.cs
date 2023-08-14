@@ -81,7 +81,7 @@ public partial class FUNShareContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=FUNShare;Integrated Security=True; Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=192.168.31.93;Initial Catalog=FUNShare;User ID=FUNShareDB;Password=987654321;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -272,9 +272,7 @@ public partial class FUNShareContext : DbContext
 
             entity.Property(e => e.CouponId).HasColumnName("Coupon_ID");
             entity.Property(e => e.Description).HasMaxLength(50);
-            entity.Property(e => e.Discount)
-                .HasMaxLength(10)
-                .IsFixedLength();
+            entity.Property(e => e.Discount).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.DueDate).HasColumnType("date");
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.ProductId).HasColumnName("Product_ID");
@@ -552,6 +550,10 @@ public partial class FUNShareContext : DbContext
             entity.Property(e => e.ReleasedTime).HasColumnType("datetime");
             entity.Property(e => e.StatusId).HasColumnName("Status_ID");
             entity.Property(e => e.SupplierId).HasColumnName("Supplier_ID");
+
+            entity.HasOne(d => d.Age).WithMany(p => p.Product)
+                .HasForeignKey(d => d.AgeId)
+                .HasConstraintName("FK_Product_Age");
 
             entity.HasOne(d => d.Interval).WithMany(p => p.Product)
                 .HasForeignKey(d => d.IntervalId)

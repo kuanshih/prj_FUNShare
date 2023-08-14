@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using prj_FUNShare.Models;
+using prj_FUNShare.ViewModels;
 using System.Globalization;
 using System.Security.Cryptography;
 
@@ -52,6 +53,12 @@ namespace prj_FUNShare.Controllers
                         select o;
                         return View(datas);
         }
+
+        public IActionResult myOrderDetail(myOrderDetailViewModel vm)
+        {
+            return View();
+        }
+
         public IActionResult myCoupon()
         {
             var datas = from i in _context.CouponList

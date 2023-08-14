@@ -41,6 +41,8 @@ public partial class Product
 
     public virtual ICollection<AdvertiseProductDetail> AdvertiseProductDetail { get; set; } = new List<AdvertiseProductDetail>();
 
+    public virtual Age Age { get; set; }
+
     public virtual ICollection<Comment> Comment { get; set; } = new List<Comment>();
 
     public virtual ICollection<ImageList> ImageList { get; set; } = new List<ImageList>();

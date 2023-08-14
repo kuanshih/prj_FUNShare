@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/prj_FUNShare.styles.css" asp-append-version="true" />
+    <!-- MDB -->
+    <link rel="stylesheet" href="~/css/mdb.min.css" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -34,6 +36,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="AccountEdit">帳戶管理</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="myOrderDetail">訂購明細</a>
                         </li>
                     </ul>
                 </div>
