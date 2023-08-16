@@ -83,5 +83,26 @@ namespace prj_FUNShare.Controllers
                         
             return View(member);
         }
+        public async Task <IActionResult> products()
+        {
+            return _context.Product != null ?
+                View(await _context.Product.ToListAsync()) :
+                          Problem("Entity set 'DemoContext.Product'  is null.");
+        }
+        public async Task<IActionResult> asyncTest()
+        {
+            var datas = from p in _context.Product.Where(p => p.PocketList.FirstOrDefault().MemberId == _id)
+                                   .Include(p => p.ProductDetail)
+                                       .ThenInclude(pp => pp.OrderDetail)
+                                                         .Include(p => p.Supplier)
+                                                                        .Include(p => p.ProductCategories)
+                                .ThenInclude(pp => pp.SubCategory)
+        
+
+                        select p;
+            return datas != null ?
+                View(await datas.ToListAsync()) :
+                Problem("Entity set 'DemoContext.Product'  is null.");
+        }
     }
 }
