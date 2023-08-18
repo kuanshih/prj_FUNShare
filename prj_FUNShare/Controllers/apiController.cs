@@ -57,18 +57,19 @@ namespace prj_FUNShare.Controllers
                         where order != null && order.MemberId == id
                         select new COrderItmeVIewModel
                         {
-                            ProductId = order.OrderDetail.FirstOrDefault().ProductDetail.ProductId,
-                            ProductName = order.OrderDetail.First().ProductDetail.Product.ProductName,
-                            Features = string.IsNullOrEmpty(order.OrderDetail.First().ProductDetail.Product.Features)? order.OrderDetail.First().ProductDetail.Product.ProductIntro: order.OrderDetail.First().ProductDetail.Product.Features,
-                            CategoryId = order.OrderDetail.First().ProductDetail.Product.ProductCategories.First().SubCategory.CategoryId,
-                            CategoryName = order.OrderDetail.First().ProductDetail.Product.ProductCategories.First().SubCategory.Category.CategoryName,
-                            CityName = order.OrderDetail.First().ProductDetail.District.City.CityName,
-                            SupplierName = order.OrderDetail.First().ProductDetail.Product.Supplier.SupplierName,
-                            beginTime = order.OrderDetail.First().ProductDetail.BeginTime,
-                            endTime = order.OrderDetail.First().ProductDetail.EndTime,
-                            _UnitPrice = (int)order.OrderDetail.First().ProductDetail.UnitPrice,
-                            OrderStatus = order.Status.Description,
-                            OrderDetailStatus = order.OrderDetail.First().Status.Description,
+                            //ProductId = 8
+                            ProductId = order.OrderDetail.First().ProductDetail.ProductId,
+                            //ProductName = order.OrderDetail.First().ProductDetail.Product.ProductName,
+                            //Features = string.IsNullOrEmpty(order.OrderDetail.First().ProductDetail.Product.Features)? order.OrderDetail.First().ProductDetail.Product.ProductIntro: order.OrderDetail.First().ProductDetail.Product.Features,
+                            //CategoryId = order.OrderDetail.First().ProductDetail.Product.ProductCategories.First().SubCategory.CategoryId,
+                            //CategoryName = order.OrderDetail.First().ProductDetail.Product.ProductCategories.First().SubCategory.Category.CategoryName,
+                            //CityName = order.OrderDetail.First().ProductDetail.District.City.CityName,
+                            //SupplierName = order.OrderDetail.First().ProductDetail.Product.Supplier.SupplierName,
+                            //beginTime = order.OrderDetail.First().ProductDetail.BeginTime,
+                            //endTime = order.OrderDetail.First().ProductDetail.EndTime,
+                            //_UnitPrice = (int)order.OrderDetail.First().ProductDetail.UnitPrice,
+                            //OrderStatus = order.Status.Description,
+                            //OrderDetailStatus = order.OrderDetail.First().Status.Description,
                         };
                         return Json(datas);
         }
