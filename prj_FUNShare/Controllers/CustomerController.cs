@@ -59,6 +59,8 @@ namespace prj_FUNShare.Controllers
             return View();
         }
 
+   
+
         public IActionResult myCoupon()
         {
             var datas = from i in _context.CouponList
@@ -103,6 +105,11 @@ namespace prj_FUNShare.Controllers
             return datas != null ?
                 View(await datas.ToListAsync()) :
                 Problem("Entity set 'DemoContext.Product'  is null.");
+        }
+
+        public IActionResult asyncmyOrderDetail(int? orderId)
+        {
+            return View();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using prj_FUNShare.Models;
 using prj_FUNShare.ViewModels;
@@ -54,24 +55,74 @@ namespace prj_FUNShare.Controllers
         {
             int id = 8; //todo 先寫死
             var datas = from order in _context.Order
+                        .Include(x => x.OrderDetail)
+                        .ThenInclude(x=>x.ProductDetail)
                         where order != null && order.MemberId == id
+                        orderby order.OrderDetail.First().ProductDetail.BeginTime descending
+
                         select new COrderItmeVIewModel
                         {
-                            //ProductId = 8
+                            //ProductId = 8,
+                            orderId = order.OrderId,
                             ProductId = order.OrderDetail.First().ProductDetail.ProductId,
-                            //ProductName = order.OrderDetail.First().ProductDetail.Product.ProductName,
-                            //Features = string.IsNullOrEmpty(order.OrderDetail.First().ProductDetail.Product.Features)? order.OrderDetail.First().ProductDetail.Product.ProductIntro: order.OrderDetail.First().ProductDetail.Product.Features,
-                            //CategoryId = order.OrderDetail.First().ProductDetail.Product.ProductCategories.First().SubCategory.CategoryId,
-                            //CategoryName = order.OrderDetail.First().ProductDetail.Product.ProductCategories.First().SubCategory.Category.CategoryName,
-                            //CityName = order.OrderDetail.First().ProductDetail.District.City.CityName,
-                            //SupplierName = order.OrderDetail.First().ProductDetail.Product.Supplier.SupplierName,
-                            //beginTime = order.OrderDetail.First().ProductDetail.BeginTime,
-                            //endTime = order.OrderDetail.First().ProductDetail.EndTime,
-                            //_UnitPrice = (int)order.OrderDetail.First().ProductDetail.UnitPrice,
-                            //OrderStatus = order.Status.Description,
-                            //OrderDetailStatus = order.OrderDetail.First().Status.Description,
+                            ProductName = order.OrderDetail.First().ProductDetail.Product.ProductName,
+                            Features = string.IsNullOrEmpty(order.OrderDetail.First().ProductDetail.Product.Features)? order.OrderDetail.First().ProductDetail.Product.ProductIntro: order.OrderDetail.First().ProductDetail.Product.Features,
+                            CategoryId = order.OrderDetail.First().ProductDetail.Product.ProductCategories.First().SubCategory.CategoryId,
+                            CategoryName = order.OrderDetail.First().ProductDetail.Product.ProductCategories.First().SubCategory.Category.CategoryName,
+                            CityName = order.OrderDetail.First().ProductDetail.District.City.CityName,
+                            SupplierName = order.OrderDetail.First().ProductDetail.Product.Supplier.SupplierName,
+                            beginTime = order.OrderDetail.First().ProductDetail.BeginTime,
+                            endTime = order.OrderDetail.First().ProductDetail.EndTime,
+                            _UnitPrice = (int)order.OrderDetail.First().ProductDetail.UnitPrice,
+                            OrderStatus = order.Status.Description,
+                            OrderDetailStatus = order.OrderDetail.First().Status.Description,
+                            ImagePath = order.OrderDetail.First().ProductDetail.Product.ImageList.First().ImagePath,
                         };
                         return Json(datas);
+        }
+        public IActionResult getmyOrderDetail(int? orderId)
+        {
+            int memberId = 8; //todo 先寫死
+            var query = _context.Order
+        .Include(x => x.OrderDetail)
+            .ThenInclude(x => x.ProductDetail)
+        .Where(order => order != null && order.MemberId == memberId);
+            if (orderId.HasValue)
+            {
+                query = query.Where(order => order.OrderId == orderId);
+            }
+            var datas = query
+                    .OrderByDescending(order => order.OrderDetail.First().ProductDetail.BeginTime)
+        .Select(order => new COrderItmeVIewModel
+        {
+            //ProductId = 8,
+            orderId = order.OrderId,
+            ProductId = order.OrderDetail.First().ProductDetail.ProductId,
+            ProductName = order.OrderDetail.First().ProductDetail.Product.ProductName,
+            Features = string.IsNullOrEmpty(order.OrderDetail.First().ProductDetail.Product.Features) ? order.OrderDetail.First().ProductDetail.Product.ProductIntro : order.OrderDetail.First().ProductDetail.Product.Features,
+            CategoryId = order.OrderDetail.First().ProductDetail.Product.ProductCategories.First().SubCategory.CategoryId,
+            CategoryName = order.OrderDetail.First().ProductDetail.Product.ProductCategories.First().SubCategory.Category.CategoryName,
+            CityName = order.OrderDetail.First().ProductDetail.District.City.CityName,
+            SupplierName = order.OrderDetail.First().ProductDetail.Product.Supplier.SupplierName,
+            beginTime = order.OrderDetail.First().ProductDetail.BeginTime,
+            endTime = order.OrderDetail.First().ProductDetail.EndTime,
+            _UnitPrice = (int)order.OrderDetail.First().ProductDetail.UnitPrice,
+            OrderStatus = order.Status.Description,
+            OrderDetailStatus = order.OrderDetail.First().Status.Description,
+            ImagePath = order.OrderDetail.First().ProductDetail.Product.ImageList.First().ImagePath,
+        });
+            return Json(datas);
+
+
+        }
+        public IActionResult now()
+        {
+            // Get current server time
+            DateTime currentTime = DateTime.Now;
+
+            // Return current time as JSON
+            return Json(new { currentTime = currentTime });
+
         }
     }
 }

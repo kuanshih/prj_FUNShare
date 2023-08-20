@@ -4,42 +4,153 @@
     ViewData["Title"] = "asyncTest";
 }
 
-<h1>asyncTest</h1>
-
 <h1 class=" mb-8">我的訂單</h1>
-<div class="tab-content" id="ex-with-icons-content">
-        <div class="row g-4" id="div1">
-        </div>
+<div id="ex-with-icons-content">
+    <span id="currentTime" style="display: none;"></span>
+    <table class="table table-hover table-striped  ">
+        <thead class="justify-content-center align-items-center ">
+            <tr>
+                <th >
+                    產品名稱
+                </th>
+                <th>
+                    提供廠商
+                </th>
+                <th>
+                    體驗時間
+                </th>
+                <th>
+                    單價
+                </th>
+                <th>
+                    報名狀況
+                </th>
+                <th>
+                   繳費狀況
+                </th>
+            </tr>
+        </thead>
+        <tbody id="futuretbody">
+
+        </tbody>
+        </table>
 </div>
 
 @section Scripts{
     <script>
-        const div = document.querySelector('#div1')
-        
-        // $.ajax({
-        //     'url': '@Url.Action("getOrderDetail","api")',
-        //     'type':'get',
-        //     'datatype':'json'
-        // })
-        //     .done(function (datas) {
+        const div1 = document.querySelector('#div1')
+        const futuretbody = document.querySelector('#futuretbody')
+        const currentTimeElement = document.querySelector('#currentTime');
+
+ 
+        async function getCurrentServerTime() {
+            try {
+                let response = await fetch('@Url.Content("~/api/now")'); // Replace with the actual API endpoint URL
+                let data = await response.json();
+                return new Date(data.currentTime); // Convert the received time to a JavaScript Date object
+            } catch (error) {
+                console.error("An error occurred:", error);
+                return null;
+            }
+        }
+        async function order2(){
+       
+            try{
+            const currentTime = new Date(currentTimeElement.textContent); // Get current time from the stored element's content
+                let response = await fetch('@Url.Content("~/api/getmyOrderDetail")')
+            let  datas = await response.json()
+            console.log(datas)
                 
-        //     })
+                const filteredData = datas.filter(data => data.productId != null && data.orderStatus !== "取消" && new Date(data.beginTime) <= currentTime);
+                const item = filteredData.map(data => {
+                    //時間格式化
+                    const beginTime = new Date(data.beginTime);
+                    const endTime = new Date(data.endTime);
+                    //價格格式化
+                    const unitPrice = data.unitPrice;
+                    const formattedUnitPrice = new Intl.NumberFormat('zh-TW', {
+                        style: 'currency',
+                        currency: 'TWD',
+                        currencyDisplay: 'symbol',
+                        maximumFractionDigits: 0
+                    }).format(unitPrice);
+                            return(
+                
+                            `
+                         <tr onclick="showOrderDetail('${data.orderId}')">
+                                    <th>
+                                            ${data.productName}
+                                            <p>
+                                                    <img src="@Url.Content("~/img/product/")${data.imagePath}" width="250" height="160" class="img-thumbnail" />
+                                            </p>
+                                    </th>
+                                    <th>
+                                            ${data.supplierName}
+                                    </th>
+                                    <th>
+                                                           ${ beginTime.getFullYear() } -${ (beginTime.getMonth() + 1).toString().padStart(2, '0') } -${ beginTime.getDate().toString().padStart(2, '0') } ${ beginTime.getHours().toString().padStart(2, '0') }:${ beginTime.getMinutes().toString().padStart(2, '0') } 
+                                                           <br>
+                                                                   <br>
+                                                                           <p class="d-flex justify-content-center align-items-center">至</p>
+                                                                                   <br>
+                                                             ${endTime.getFullYear()} -${(endTime.getMonth() + 1).toString().padStart(2, '0')} -${endTime.getDate().toString().padStart(2, '0')} ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}
+                                    </th>
+                                    <th>
+                                                     ${formattedUnitPrice} 元
+                                    </th>
+                                    <th>
+                                             ${data.orderDetailStatus}
+                                    </th>
+                                    <th>
+                                            ${data.orderStatus}
+                                    </th>
+                                </tr>
+                            `
+                            )
+                    
+            })
+                document.querySelector("#futuretbody").innerHTML = item.join("");
+ 
+                }
+                catch(error){
+                alert("An error occurred:", error)
+                }
+        }
+        (async () => {
+            const currentTime = await getCurrentServerTime();
+            currentTimeElement.textContent = currentTime.toISOString(); // Store the current time as a string
+            await order2(); // Wait for order2 to complete
+        })();
 
-        console.log(fetch('@Url.Content("/api/getOrderDetail")'));
-        fetch('@Url.Content("/api/getOrderDetail")')
-            .then(response => {
-                console.log(response)
-                console.log(response.ok)
-            })
 
-        console.log(fetch('@Url.Content("/api/getOrderDetail")'));
-        fetch('@Url.Content("/api/getOrderDetail")')
-            .then(response => {
-                return response.json();
-            })
-            .then(data => {
-                document.querySelector("#div1").innerHTML = data;
-            })
+    </script>
+    <script>
+        function showOrderDetail(orderId) {
+            window.location.href = `@Url.Content("~/Customer/asyncmyOrderDetail?orderId=")` + orderId;
+        }
+    </script>
+
+    <script>
+               //function order(){fetch('@Url.Content("/api/getOrderDetail")')
+        //    .then(response => {
+        //        return response.json();
+        //    })
+        //    .then(datas => {
+        //        console.log(datas)
+
+        //        const item =datas.map(data => {
+        //            const { productName, features, categoryName }=data
+        //            return(
+        //            `
+        //                            <p>${productName}</p>
+        //                                      <p>${features}</p>
+        //                                                <p>${categoryName}</p>
+        //            `
+        //            )
+        //        })
+        //        document.querySelector("#div1").innerHTML = item.join("");
+        //    })}
+        //order();
     </script>
 }
 
