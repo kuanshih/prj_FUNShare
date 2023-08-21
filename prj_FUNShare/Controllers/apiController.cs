@@ -51,6 +51,8 @@ namespace prj_FUNShare.Controllers
                         };
                         return Json(datas);
         }
+
+        //待刪除 改用getmyOrderDetail
         public IActionResult getOrderDetail()
         {
             int id = 8; //todo 先寫死
