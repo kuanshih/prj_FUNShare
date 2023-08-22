@@ -35,6 +35,7 @@
 
         public DateTime?  beginTime { get; set; }
         public DateTime? endTime { get; set; }
+        public DateTime OrderTime { get; set; }
 
         public string  OrderStatus { get; set; }
         public string OrderDetailStatus { get; set; }
