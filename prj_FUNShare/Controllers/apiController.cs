@@ -118,6 +118,7 @@ namespace prj_FUNShare.Controllers
 
 
         }
+
         public IActionResult now()
         {
             // Get current server time
@@ -126,6 +127,34 @@ namespace prj_FUNShare.Controllers
             // Return current time as JSON
             return Json(new { currentTime = currentTime });
 
+        }
+        public IActionResult recommend()
+        {
+            int id = 8; //todo 先寫死
+            //----------------------------------------------------登入//
+
+            //----------------------------------------------------登入//
+
+            //----------------------------------------------------卡片資料//
+            var datas = from prod in _context.Product
+                        where prod.StatusId == 12 && prod.PocketList.FirstOrDefault().MemberId == id
+                        select new CProductCardViewModel
+                        {
+                            ProductId = prod.ProductId,
+                            ProductName = prod.ProductName,
+                            Features = string.IsNullOrEmpty(prod.Features) ? prod.ProductIntro : prod.Features,
+                            //AgeGrade = prod.Age.Grade,
+                            CategoryId = prod.ProductCategories.First().SubCategory.CategoryId,
+                            CategoryName = prod.ProductCategories.First().SubCategory.Category.CategoryName,
+                            SubCategoryName = prod.ProductCategories.First().SubCategory.SubCategoryName,
+                            CityName = prod.ProductDetail.Select(x => x.District.City.CityName).Distinct().Count() > 1 ? "多縣市" : prod.ProductDetail.Select(x => x.District.City.CityName).First(),
+                            Rank = prod.Comment.Select(x => x.Rank).Average(),
+                            ImagePath = prod.ImageList.Where(x => x.IsMain == true).First().ImagePath,
+                            IsClass = prod.IsClass ? "課程" : "體驗",
+                            IsPocketed = prod.PocketList.Where(x => x.MemberId == id).Any(),
+                            _UnitPrice = (int)prod.ProductDetail.Select(x => x.UnitPrice).Min()
+                        };
+            return Json(datas);
         }
     }
 }

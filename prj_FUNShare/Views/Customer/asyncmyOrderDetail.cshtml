@@ -91,11 +91,9 @@
     <nav>
         <ul class="menu d-flex justify-content-between">
             <li><a href="#about">課程介紹</a></li>
-            <li><a href="#order">訂單</a></li>
-            <li><a href="#price">帳單</a></li>
+            <li><a href="#order">訂單資訊</a></li>
             <li><a href="#cancel">取消更改政策</a></li>
             <li><a href="#location">位置</a></li>
-            <li><a href="#reccommand">你可能也喜歡</a></li>
         </ul>
     </nav>
     </div>
@@ -139,6 +137,12 @@
                     </div>
                     <br>
                 </div>
+                <h2>體驗回饋</h2>
+                <div class="review">
+                    <label>留下您寶貴的意見:</label>
+                    <input type="text" class="form-control justify-content-start align-items-start" style="height: 100px;">
+                    <button class="btn btn-floating ">送出</button>
+                </div>
 
             </div>
             <!--左側-->
@@ -156,7 +160,7 @@
            @*      todo...要想訂單編號邏輯 *@
                 <div>
                     <br>
-                    <h2>訂單</h2>
+                    <h2 id="order">訂單</h2>
                     <ul>
                         <p><i class="fas fa-arrow-right-long"></i>  訂單編號: 20235462124</p>
                         <p><i class="far fa-user"></i>  人數: 2人</p>
@@ -166,7 +170,7 @@
                     <br>
                     <h2>帳單</h2>
                     <ul>
-                        <p id="ordertime">交易時間: 2023/07/29 18:47</p>
+                        <p id="ordertime"></p>
                         <p>訂單金額: TWD 580</p>
                         <p>結帳金額: TWD 580</p>
                         <p>紅利回饋: 580</p>
@@ -187,6 +191,8 @@
         </div>
     </div>
 </div>
+<br />
+
 
 @section Scripts{
     <script>
@@ -230,7 +236,6 @@
     $(".xs1").toggle();
     $(".xs2").toggle();
   });});
-
     </script>
 }
 @section Styles{

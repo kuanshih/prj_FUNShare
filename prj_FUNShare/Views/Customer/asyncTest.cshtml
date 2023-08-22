@@ -4,7 +4,7 @@
     ViewData["Title"] = "asyncTest";
 }
 
-<h1 class=" mb-8">我的訂單</h1>
+<h1 class=" mb-8">我的課程體驗</h1>
 <div id="ex-with-icons-content">
     <span id="currentTime" style="display: none;"></span>
     <h3>未來的體驗活動</h3>
@@ -62,13 +62,47 @@
         <tbody id="pasttbody">
         </tbody>
     </table>
+    <h3>取消的體驗活動</h3>
+    <table class="table table-hover table-striped  ">
+        <thead class="justify-content-center align-items-center ">
+            <tr>
+                <th>
+                    產品名稱
+                </th>
+                <th>
+                    提供廠商
+                </th>
+                <th>
+                    體驗時間
+                </th>
+                <th>
+                    單價
+                </th>
+                <th>
+                    報名狀況
+                </th>
+                <th>
+                    繳費狀況
+                </th>
+            </tr>
+        </thead>
+        <tbody id="canceledtbody">
+        </tbody>
+    </table>
 </div>
 
 @section Scripts{
     <script>
-        const div1 = document.querySelector('#div1')
-        const futuretbody = document.querySelector('#futuretbody')
+
         const currentTimeElement = document.querySelector('#currentTime');
+        const futuretbody = document.querySelector('#futuretbody');
+        const pasttbody = document.querySelector('#pasttbody');
+        const canceledtbody = document.querySelector('#canceledtbody');
+        const apiUrl = {
+            getCurrentServerTime: '@Url.Content("~/api/now")',
+            getMyOrderDetail: '@Url.Content("~/api/getmyOrderDetail")'
+        };
+
 
         //現在時間api
         async function getCurrentServerTime() {
@@ -82,16 +116,19 @@
             }
         }
 
-        //未來體驗活動
-        async function orderFuture(){
+        //共用table function
+        async function orderTable(tbody,conditionSatus ,conditionTime) {
        
             try{
             const currentTime = new Date(currentTimeElement.textContent); // Get current time from the stored element's content
+            
                 let response = await fetch('@Url.Content("~/api/getmyOrderDetail")')
             let  datas = await response.json()
             console.log(datas)
-                
-                const filteredData = datas.filter(data => data.productId != null && data.orderStatus !== "取消" && new Date(data.beginTime) >= currentTime);
+
+                const filteredData = datas.filter(data =>
+                    data.productId != null &&conditionSatus(data) /* data.orderStatus !== "取消"  */&& conditionTime(data, currentTime)
+                );
                 const item = filteredData.map(data => {
                     //時間格式化
                     const beginTime = new Date(data.beginTime);
@@ -139,7 +176,7 @@
                             )
                     
             })
-                document.querySelector("#futuretbody").innerHTML = item.join("");
+                tbody.innerHTML = item.join("");
  
                 }
                 catch(error){
@@ -147,80 +184,23 @@
                 }
         }
 
-        //過去體驗活動
+        async function orderFuture() {
+            await orderTable(futuretbody, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) >= currentTime);
+        }
+
         async function orderPast() {
-
-            try {
-                const currentTime = new Date(currentTimeElement.textContent); // Get current time from the stored element's content
-                let response = await fetch('@Url.Content("~/api/getmyOrderDetail")')
-                let datas = await response.json()
-                console.log(datas)
-
-                const filteredData = datas.filter(data => data.productId != null && data.orderStatus !== "取消" && new Date(data.beginTime) <= currentTime);
-                const item = filteredData.map(data => {
-                    //時間格式化
-                    const beginTime = new Date(data.beginTime);
-                    const endTime = new Date(data.endTime);
-                    //價格格式化
-                    const unitPrice = data.unitPrice;
-                    const formattedUnitPrice = new Intl.NumberFormat('zh-TW', {
-                        style: 'currency',
-                        currency: 'TWD',
-                        currencyDisplay: 'symbol',
-                        maximumFractionDigits: 0
-                    }).format(unitPrice);
-                    return (
-
-                        `
-                                 <tr onclick="showOrderDetail('${data.orderId}')">
-                                            <th>
-                                                    ${data.productName}
-                                                    <p>
-                                                            <img src="@Url.Content("~/img/product/")${data.imagePath}" width="250" height="160" class="img-thumbnail" />
-                                                    </p>
-                                            </th>
-                                            <th>
-                                                    ${data.supplierName}
-                                            </th>
-                                            <th>
-                                                                   ${beginTime.getFullYear()} -${(beginTime.getMonth() + 1).toString().padStart(2, '0')} -${beginTime.getDate().toString().padStart(2, '0')} ${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')}
-                                                                   <br>
-                                                                           <br>
-                                                                                   <p class="d-flex justify-content-center align-items-center">至</p>
-                                                                                           <br>
-                                                                     ${endTime.getFullYear()} -${(endTime.getMonth() + 1).toString().padStart(2, '0')} -${endTime.getDate().toString().padStart(2, '0')} ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}
-                                            </th>
-                                            <th>
-                                                             ${formattedUnitPrice} 元
-                                            </th>
-                                            <th>
-                                                     ${data.orderDetailStatus}
-                                            </th>
-                                            <th>
-                                                    ${data.orderStatus}
-                                            </th>
-                                        </tr>
-                                    `
-                    )
-
-                })
-                document.querySelector("#pasttbody").innerHTML = item.join("");
-
-            }
-            catch (error) {
-                alert("An error occurred:", error)
-            }
+            await orderTable(pasttbody, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) <= currentTime);
+        }
+        async function orderCanceled() {
+            await orderTable(canceledtbody, data => data.orderStatus === "取消", (data, currentTime) => new Date(data.beginTime) <= currentTime || Date(data.beginTime) > currentTime);
         }
 
         (async () => {
             const currentTime = await getCurrentServerTime();
-            currentTimeElement.textContent = currentTime.toISOString(); // Store the current time as a string
-            await orderFuture(); // Wait for order2 to complete
-        })();
-        (async () => {
-            const currentTime = await getCurrentServerTime();
-            currentTimeElement.textContent = currentTime.toISOString(); // Store the current time as a string
-            await orderPast(); // Wait for order2 to complete
+            currentTimeElement.textContent = currentTime.toISOString();
+            await orderFuture();
+            await orderPast();
+            await orderCanceled();
         })();
       
 

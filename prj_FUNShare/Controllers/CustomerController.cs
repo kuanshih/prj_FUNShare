@@ -42,16 +42,17 @@ namespace prj_FUNShare.Controllers
                         .ThenInclude(pppp => pppp.Supplier)
 
                          .Include(p => p.OrderDetail)
-                        .ThenInclude(pp=>pp.Status)
+                        .ThenInclude(pp => pp.Status)
 
                         .Include(p => p.Status)
                         .Include(p => p.OrderDetail)
                         .ThenInclude(pp => pp.ProductDetail)
                         .ThenInclude(ppp => ppp.Product)
-                        .ThenInclude(pppp=>pppp.ImageList)
+                        .ThenInclude(pppp => pppp.ImageList)
                         orderby o.OrderDetail.First().ProductDetail.BeginTime descending
                         select o;
-                        return View(datas);
+            return View(datas);
+
         }
 
         public IActionResult myOrderDetail(myOrderDetailViewModel vm)
@@ -110,6 +111,10 @@ namespace prj_FUNShare.Controllers
         public IActionResult asyncmyOrderDetail(int? orderId)
         {
             return View();
+        }
+        public IActionResult reccommend()
+        {
+            return PartialView();
         }
     }
 }
