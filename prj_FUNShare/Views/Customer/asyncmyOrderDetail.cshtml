@@ -3,7 +3,18 @@
     ViewData["Title"] = "asyncmyOrderDetail";
 }
 
-
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>calendar</title>
+    <link href="calendar.css" rel="stylesheet" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
 <div id="orderDetailContent">
     <!-- Carousel wrapper -->
     <div id="carouselBasicExample" class="carousel slide carousel-fade" data-mdb-ride="carousel">
@@ -180,6 +191,7 @@
                     <br>
                     <h2>課程體驗時間</h2>
                     <ul id="eventTime"></ul>
+
                 </div>
                 <div>
                     <br>
@@ -233,8 +245,8 @@
     $(function(){
     $(".flip").click(function(){
     $(".panel").slideToggle("slow");
-    $(".xs1").toggle();
-    $(".xs2").toggle();
+    // $(".xs1").toggle();
+    // $(".xs2").toggle();
   });});
     </script>
 }
@@ -380,6 +392,8 @@
             display: none;
         }
     </style>
+
+  
 }
 
 

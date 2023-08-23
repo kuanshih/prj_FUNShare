@@ -1,0 +1,512 @@
+﻿
+<head>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Tabs navs -->
+    <ul class="nav nav-tabs nav-justified mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active"
+               id="ex3-tab-1"
+               data-mdb-toggle="tab"
+               href="#ex3-tabs-1"
+               role="tab"
+               aria-controls="ex3-tabs-1"
+               aria-selected="true">Link</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="ex3-tab-2"
+               data-mdb-toggle="tab"
+               href="#ex3-tabs-2"
+               role="tab"
+               aria-controls="ex3-tabs-2"
+               aria-selected="false">我的課表</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="ex3-tab-3"
+               data-mdb-toggle="tab"
+               href="#ex3-tabs-3"
+               role="tab"
+               aria-controls="ex3-tabs-3"
+               aria-selected="false">體驗課程列表</a>
+        </li>
+    </ul>
+    <!-- Tabs navs -->
+    <!-- Tabs content -->
+    <div class="tab-content" id="ex2-content">
+        <div class="tab-pane fade show active"
+             id="ex3-tabs-1"
+             role="tabpanel"
+             aria-labelledby="ex3-tab-1">
+            Tab 1 content
+        </div>
+        <div class="tab-pane fade"
+             id="ex3-tabs-2"
+             role="tabpanel"
+             aria-labelledby="ex3-tab-2">
+            <div class="container d-flex">
+                <div class="calendar">
+                    <div class="month">
+                        <i class="fas fa-angle-left prev"></i>
+                        <div class="date">
+                            <h1></h1>
+                            <p>Fri May 29,2020</p>
+                        </div>
+                        <i class="fas fa-angle-right next"></i>
+                    </div>
+                    <div class="weekdays">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+                    <div class="days">
+                    </div>
+                </div>
+                <div class="schedule panelSch">
+                    <div class="title">
+                        <div class="pickday">
+                            <h1>schedule</h1>
+                        </div>
+                    </div>
+                    <div class="list"></div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade"
+             id="ex3-tabs-3"
+             role="tabpanel"
+             aria-labelledby="ex3-tab-3">
+            <div id="ex-with-icons-content">
+                <span id="currentTime" style="display: none;"></span>
+                <h3>未來的體驗活動</h3>
+                <table class="table table-hover table-striped  ">
+                    <thead class="justify-content-center align-items-center ">
+                        <tr>
+                            <th>
+                                產品名稱
+                            </th>
+                            <th>
+                                提供廠商
+                            </th>
+                            <th>
+                                體驗時間
+                            </th>
+                            <th>
+                                單價
+                            </th>
+                            <th>
+                                報名狀況
+                            </th>
+                            <th>
+                                繳費狀況
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="futuretbody">
+                    </tbody>
+                </table>
+                <h3>過去的體驗活動</h3>
+                <table class="table table-hover table-striped  ">
+                    <thead class="justify-content-center align-items-center ">
+                        <tr>
+                            <th>
+                                產品名稱
+                            </th>
+                            <th>
+                                提供廠商
+                            </th>
+                            <th>
+                                體驗時間
+                            </th>
+                            <th>
+                                單價
+                            </th>
+                            <th>
+                                報名狀況
+                            </th>
+                            <th>
+                                繳費狀況
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="pasttbody">
+                    </tbody>
+                </table>
+                <h3>取消的體驗活動</h3>
+                <table class="table table-hover table-striped  ">
+                    <thead class="justify-content-center align-items-center ">
+                        <tr>
+                            <th>
+                                產品名稱
+                            </th>
+                            <th>
+                                提供廠商
+                            </th>
+                            <th>
+                                體驗時間
+                            </th>
+                            <th>
+                                單價
+                            </th>
+                            <th>
+                                報名狀況
+                            </th>
+                            <th>
+                                繳費狀況
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="canceledtbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Tabs content -->
+    @section Scripts{
+    <script>
+
+        const currentTimeElement = document.querySelector('#currentTime');
+        const futuretbody = document.querySelector('#futuretbody');
+        const pasttbody = document.querySelector('#pasttbody');
+        const canceledtbody = document.querySelector('#canceledtbody');
+        const apiUrl = {
+            getCurrentServerTime: '@Url.Content("~/api/now")',
+            getMyOrderDetail: '@Url.Content("~/api/getmyOrderDetail")'
+        };
+
+
+        //現在時間api
+        async function getCurrentServerTime() {
+            try {
+                let response = await fetch('@Url.Content("~/api/now")'); // Replace with the actual API endpoint URL
+                let data = await response.json();
+                return new Date(data.currentTime); // Convert the received time to a JavaScript Date object
+            } catch (error) {
+                console.error("An error occurred:", error);
+                return null;
+            }
+        }
+
+        //共用table function
+        async function orderTable(tbody,conditionSatus ,conditionTime) {
+       
+            try{
+            const currentTime = new Date(currentTimeElement.textContent); // Get current time from the stored element's content
+            
+                let response = await fetch('@Url.Content("~/api/getmyOrderDetail")')
+            let  datas = await response.json()
+            console.log(datas)
+
+                const filteredData = datas.filter(data =>
+                    data.productId != null &&conditionSatus(data) /* data.orderStatus !== "取消"  */&& conditionTime(data, currentTime)
+                );
+                const item = filteredData.map(data => {
+                    //時間格式化
+                    const beginTime = new Date(data.beginTime);
+                    const endTime = new Date(data.endTime);
+                    //價格格式化
+                    const unitPrice = data.unitPrice;
+                    const formattedUnitPrice = new Intl.NumberFormat('zh-TW', {
+                        style: 'currency',
+                        currency: 'TWD',
+                        currencyDisplay: 'symbol',
+                        maximumFractionDigits: 0
+                    }).format(unitPrice);
+                            return(
+                
+                            `
+                         <tr onclick="showOrderDetail('${data.orderId}')">
+                                    <th>
+                                            ${data.productName}
+                                            <p>
+                                                    <img src="@Url.Content("~/img/product/")${data.imagePath}" width="250" height="160" class="img-thumbnail" />
+                                            </p>
+                                    </th>
+                                    <th>
+                                            ${data.supplierName}
+                                    </th>
+                                    <th>
+                                                           ${ beginTime.getFullYear() } -${ (beginTime.getMonth() + 1).toString().padStart(2, '0') } -${ beginTime.getDate().toString().padStart(2, '0') } ${ beginTime.getHours().toString().padStart(2, '0') }:${ beginTime.getMinutes().toString().padStart(2, '0') } 
+                                                           <br>
+                                                                   <br>
+                                                                           <p class="d-flex justify-content-center align-items-center">至</p>
+                                                                                   <br>
+                                                             ${endTime.getFullYear()} -${(endTime.getMonth() + 1).toString().padStart(2, '0')} -${endTime.getDate().toString().padStart(2, '0')} ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}
+                                    </th>
+                                    <th>
+                                                     ${formattedUnitPrice} 元
+                                    </th>
+                                    <th>
+                                             ${data.orderDetailStatus}
+                                    </th>
+                                    <th>
+                                            ${data.orderStatus}
+                                    </th>
+                                </tr>
+                            `
+                            )
+                    
+            })
+                tbody.innerHTML = item.join("");
+ 
+                }
+                catch(error){
+                alert("An error occurred:", error)
+                }
+        }
+
+        async function orderFuture() {
+            await orderTable(futuretbody, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) >= currentTime);
+        }
+
+        async function orderPast() {
+            await orderTable(pasttbody, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) <= currentTime);
+        }
+        async function orderCanceled() {
+            await orderTable(canceledtbody, data => data.orderStatus === "取消", (data, currentTime) => new Date(data.beginTime) <= currentTime || Date(data.beginTime) > currentTime);
+        }
+
+        (async () => {
+            const currentTime = await getCurrentServerTime();
+            currentTimeElement.textContent = currentTime.toISOString();
+            await orderFuture();
+            await orderPast();
+            await orderCanceled();
+        })();
+      
+
+
+    </script>
+
+    <script>
+        function showOrderDetail(orderId) {
+            window.location.href = `@Url.Content("~/Customer/asyncmyOrderDetail?orderId=")` + orderId;
+        }
+    </script>
+    <script>
+            const date = new Date();
+
+
+
+            const renderCalendar = () => {
+
+
+                date.setDate(1);
+
+                const monthDays = document.querySelector(".days");
+
+
+                const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+
+                const prevLastDay = new Date(date.getFullYear(), date.getMonth(), 0).getDate()
+
+
+
+                const firstDayIndex = date.getDay();
+
+                const lastDayIndex = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDay()
+
+                console.log(lastDayIndex)
+                const nextDays = 7 - lastDayIndex - 1;
+
+                const months = [
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December",
+                ];
+                document.querySelector(".date h1").innerHTML = months[date.getMonth()];
+
+                document.querySelector('.date p').innerHTML = new Date().toDateString();
+
+                let days = "";
+
+
+                for (let x = firstDayIndex; x > 0; x--) {
+                    days += `<div class="prev-date flip">${prevLastDay - x + 1}</div>`
+                }
+
+
+                for (let i = 1; i <= lastDay; i++) {
+                    if (i === new Date().getDate() && date.getMonth() === new Date().getMonth()) {
+                        days += `<div class="today flip">${i}</div>`;
+                    }
+                    else {
+                        days += `<div class="flip">${i}</div>`;
+                    }
+                }
+
+                for (let j = 1; j <= nextDays; j++) {
+                    days += `<div class="next-date flip">${j}</div>`
+                    monthDays.innerHTML = days;
+                }
+
+                //收合script
+                $('.flip').click(function () {
+                    $(".schedule").slideToggle("slow");
+                    flipClicked = true;
+                });
+            }
+
+
+            document.querySelector('.prev').addEventListener('click', () => {
+                date.setMonth(date.getMonth() - 1);
+                renderCalendar();
+
+            });
+
+            document.querySelector('.next').addEventListener('click', () => {
+                date.setMonth(date.getMonth() + 1);
+                renderCalendar();
+
+            });
+
+            renderCalendar();
+
+        </script>
+    }
+
+    @section Styles{
+        <style>
+            .calendar {
+                width: 45rem;
+                height: 52rem;
+                background-color: #e3dcdc;
+                box-shadow: 0 0.5rem 3rem rgba(0,0,0,0.4);
+            }
+
+            .month {
+                width: 100%;
+                height: 12rem;
+                background-color: #d2dad7;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 2rem;
+                text-align: center;
+                text-shadow: 0 0.3rem o.5rem rgba(0,0,0,0.5);
+            }
+
+                .month i {
+                    font-size: 2.5rem;
+                    cursor: pointer;
+                }
+
+                .month h1 {
+                    font-size: 3rem;
+                    font-weight: 400;
+                    text-transform: uppercase;
+                    letter-spacing: 0.2rem;
+                    margin-bottom: 1rem;
+                }
+
+                .month p {
+                    font-size: 1.6rem;
+                }
+
+            .weekdays {
+                width: 100%;
+                height: 5rem;
+                padding: 0 0.4rem;
+                display: flex;
+                align-items: center;
+            }
+
+                .weekdays div {
+                    font-size: 1.5rem;
+                    font-weight: 400;
+                    letter-spacing: 0.1rem;
+                    width: calc(44.2rem/7);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-shadow: 0 0.3rem 0.5rem rgba(0,0,0,0.5);
+                }
+
+            .days {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                padding: 0.2rem
+            }
+
+                .days div {
+                    font-size: 1.4rem;
+                    margin: 0.3rem;
+                    width: calc(40.2rem/7);
+                    height: 5rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-shadow: 0 0.3rem 0.5rem rgba(0,0,0,0.5);
+                    transition: backgrouod-color 0.2s;
+                }
+
+                    .days div:hover:not(.today) {
+                        background-color: #262626;
+                        border: 0.2rem solid #777;
+                        cursor: pointer;
+                    }
+
+            .prev-date,
+            .next-date {
+                opacity: 0.5;
+            }
+
+            .today {
+                background-color: #94aaa2;
+            }
+
+
+            .schedule {
+                width: 45rem;
+                height: 52rem;
+                background-color: #e1dfe1;
+                box-shadow: 0 0.3rem 3rem rgba(0,0,0,0.3);
+                display: none;
+            }
+
+            .title {
+                width: 100%;
+                height: 12rem;
+                background-color: #d2dad7;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 2rem;
+                text-align: center;
+                text-shadow: 0 0.3rem o.5rem rgba(0,0,0,0.5);
+            }
+
+                .title h1 {
+                    font-size: 3rem;
+                    font-weight: 400;
+                    text-transform: uppercase;
+                    letter-spacing: 0.2rem;
+                    margin-bottom: 1rem;
+                }
+        </style>
+    }
+
+    <!-- MDB -->
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+</body>

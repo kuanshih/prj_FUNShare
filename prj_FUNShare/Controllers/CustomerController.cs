@@ -116,5 +116,10 @@ namespace prj_FUNShare.Controllers
         {
             return PartialView();
         }
+
+        public IActionResult testing()
+        {
+            return View();
+        }
     }
 }
