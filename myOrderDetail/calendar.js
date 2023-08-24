@@ -60,9 +60,9 @@ const renderCalendar=()=>{
     
     for(let j=1;j<=nextDays;j++){
         days+=`<div class="next-date flip">${j}</div>`
-        monthDays.innerHTML =days;
+        
     }
-
+monthDays.innerHTML =days;
       //收合script
         $('.flip').click(function() {
             console.log(this)
@@ -72,6 +72,7 @@ const renderCalendar=()=>{
 }
 
 
+
     document.querySelector('.prev').addEventListener('click', () => {
         date.setMonth(date.getMonth() - 1);
         renderCalendar();
@@ -79,10 +80,13 @@ const renderCalendar=()=>{
     });
 
     document.querySelector('.next').addEventListener('click', () => {
-        date.setMonth(date.getMonth() + 1);
+        date.setMonth(date.getMonth() +1);
+        console.log(this)
         renderCalendar();
         
     });
+
+   
 
   renderCalendar();
     

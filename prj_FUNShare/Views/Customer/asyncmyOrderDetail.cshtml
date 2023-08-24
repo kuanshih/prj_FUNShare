@@ -7,13 +7,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>calendar</title>
-    <link href="calendar.css" rel="stylesheet" />
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+@* map *@
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 </head>
 <div id="orderDetailContent">
     <!-- Carousel wrapper -->
@@ -77,21 +80,23 @@
         </button>
     </div>
     <!-- Carousel wrapper -->
+
     <br />
     <div class="container">
         <h1 id="title" class="h-100 d-flex justify-content-center align-items-center"></h1>
+        <p id="status" class="h-100 d-flex justify-content-center align-items-center"></p>
         <!-- Stepper -->
         <div class="wrapper option-1 option-1-1">
             <ol class="c-stepper">
-                <li class="c-stepper__item">
+                <li id="c-stepper__item1" class="c-stepper__item c-stepper__item1">
                     <h3 class="c-stepper__title">報名付款</h3>
                     <p class="c-stepper__desc">報名狀態</p>
                 </li>
-                <li class="c-stepper__item">
+                <li id="c-stepper__item2" class="c-stepper__item c-stepper__item2">
                     <h3 class="c-stepper__title">報到參與體驗</h3>
                     <p class="c-stepper__desc">產生QRcode</p>
                 </li>
-                <li class="c-stepper__item">
+                <li id="c-stepper__item3" class="c-stepper__item c-stepper__item3">
                     <h3 class="c-stepper__title">回饋</h3>
                     <p class="c-stepper__desc">留言</p>
                 </li>
@@ -142,17 +147,15 @@
                 </div>
                 <div>
                     <br>
-                    <h2 id="location">位置</h2>
-                    <div class="col-md-12">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3618.403767109375!2d121.30845667611052!3d24.918311442938855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34681906c6ffce35%3A0xe6a6f2910cdf511a!2z6aaZ6I2J6YeO5ZyS!5e0!3m2!1sen!2stw!4v1692098739764!5m2!1sen!2stw"  width="600" height="450" style="border:1px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <h2 id="location" class="location">位置</h2>
+                    <div id="map"class="col-md-12">
+                        <div id="map"></div>
                     </div>
                     <br>
                 </div>
-                <h2>體驗回饋</h2>
-                <div class="review">
-                    <label>留下您寶貴的意見:</label>
-                    <input type="text" class="form-control justify-content-start align-items-start" style="height: 100px;">
-                    <button class="btn btn-floating ">送出</button>
+                
+                <div id="review" class="review">
+           
                 </div>
 
             </div>
@@ -212,21 +215,59 @@
         const urlParams = new URLSearchParams(window.location.search);
         const orderId = urlParams.get('orderId');
 
+        const urlParams2 = new URLSearchParams(window.location.search);
+        const processStatus = urlParams2.get('processStatus');
+
         //const title = document.querySelector('title')
         //const div1 = document.querySelector('#div1')
 
         //fetch 帶入資料
 
         async function orderDetail(){
-            const response = await fetch(`@Url.Content("~/api/getmyOrderDetail?orderId=")${orderId}`)
+            const response = await fetch(`@Url.Content("~/api/getmyOrderDetail?orderId=")${orderId}` + `&processStatus=${processStatus}`)
             const datas = await response.json();
             console.log(datas)
             //時間格式化
             const beginTime = new Date(datas[0].beginTime);
             const endTime = new Date(datas[0].endTime);
             const ordertime = new Date(datas[0].orderTime);
-   
-                document.querySelector("#title").innerHTML = datas[0].productName
+            const place = datas[0].cityName + datas[0].districtName
+            const isattend = datas[0].isAttend;
+            console.log(isattend)
+
+
+            // status
+            //取消
+            if (datas[0].orderStatus === "取消") {
+                document.querySelector("#status").innerHTML = datas[0].orderStatus
+            }
+            //未付款
+            //報名成功已付款
+            else if (datas[0].orderStatus !== "未付款" && datas[0].orderDetailStatus === "報名成功" && !datas[0].isAttend) {
+                document.querySelector("#status").innerHTML = datas[0].orderStatus + datas[0].orderDetailStatus + datas[0].isAttend
+        
+            }
+            //報名成功但未參加
+            else if (datas[0].orderStatus === "已付款" && datas[0].orderDetailStatus === "報名後未參加") {
+                document.querySelector("#status").innerHTML = datas[0].orderStatus + datas[0].orderDetailStatus + datas[0].isAttend
+                
+            }
+            //報名成功有參加未留言
+            else if (datas[0].orderStatus === "已付款" && datas[0].orderDetailStatus === "報名成功" && datas[0].isAttend) {
+                document.querySelector("#status").innerHTML = datas[0].orderStatus + datas[0].orderDetailStatus + datas[0].isAttend
+                document.querySelector("#review").innerHTML = `         <h2>體驗回饋</h2>
+                            <label>留下您寶貴的意見:</label>
+                            <input type="text" class="form-control justify-content-start align-items-start" style="height: 100px;">
+                            <button class="btn btn-floating ">送出</button>`
+            }
+            //報名成功有參加已留言
+            else if (datas[0].orderStatus === "已付款" && datas[0].orderDetailStatus === "報名後參加且留言" && datas[0].isAttend) {
+                document.querySelector("#status").innerHTML = "已留言囉"
+            }
+            // status
+    
+            //測試
+            document.querySelector("#title").innerHTML = datas[0].productName
             document.querySelector("#div1").innerHTML = datas[0].features
             document.querySelector("#img1").innerHTML = `<img src="../img/product/${datas[0].imagePath}"class="d-block w-100" alt="First img" />`
             document.querySelector("#signpStatus").innerHTML = `    ${datas[0].orderDetailStatus}`
@@ -236,6 +277,60 @@
                                                                 <p class="justify-content-center">至</p>
                                                               <p>${endTime.getFullYear()} -${(endTime.getMonth() + 1).toString().padStart(2, '0')} -${endTime.getDate().toString().padStart(2, '0')} ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}</p>`
             document.querySelector("#supplier").innerHTML = `    ${datas[0].supplierName}`
+
+            document.querySelector("#location").innerHTML = `<div>${datas[0].cityName}${datas[0].districtName}${datas[0].address}</div>`
+
+
+
+            //地圖function
+            let map;
+            async function initMap() {
+                // The location of Uluru
+                const position = { lat: -25.344, lng: 131.031 };
+                const { Map } = await google.maps.importLibrary("maps");
+                const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
+                let testposition = "";
+
+                function geocode() {
+                    var location = place;
+                    axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                        params: {
+                            address: location,
+                            key: 'AIzaSyDdEXjwGZSJgCYTBhl7Pmp4KWaJhGJAmwU'
+                        }
+                    })
+                        .then(function (response) {
+                            console.log(response)
+
+                            var getlat = response.data.results[0].geometry.location.lat;
+                            var getlng = response.data.results[0].geometry.location.lng;
+                            var output = `{lat:${getlat},lng:${getlng}}`;
+                            position.lat = getlat;
+                            position.lng = getlng;
+
+                            // The map, centered at Uluru
+                            map = new Map(document.getElementById("map"), {
+                                zoom: 13,
+                                center: position,
+                                mapId: "DEMO_MAP_ID",
+                            });
+
+                            // The marker, positioned at Uluru
+                            const marker = new AdvancedMarkerView({
+                                map: map,
+                                position: position,
+                                title: "Uluru",
+                            });
+
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
+                }
+                geocode()
+            }
+
+            initMap();
         }
 
         orderDetail();
@@ -249,6 +344,10 @@
     // $(".xs2").toggle();
   });});
     </script>
+
+    <script>
+        (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })
+            ({ key: "AIzaSyDdEXjwGZSJgCYTBhl7Pmp4KWaJhGJAmwU", v: "beta" });</script>
 }
 @section Styles{
     <style>
@@ -305,6 +404,7 @@
         }
 
         }
+
         }
 
         .c-stepper__title {
@@ -390,6 +490,16 @@
             border-width: thin; */
       /*       text-align: center; */
             display: none;
+        }
+
+/*         地圖 */
+        #map {
+            height: 400px;
+            width: 100%;
+         
+        }
+        .location{
+            
         }
     </style>
 

@@ -23,31 +23,30 @@ async function initMap() {
 
         var getlat = response.data.results[0].geometry.location.lat;
         var getlng = response.data.results[0].geometry.location.lng;
-        var output = `<div>{lat:${getlat},lng:${getlng}}</div>`;
-        
+        var output = `{lat:${getlat},lng:${getlng}}`;
+        position.lat=getlat;
+        position.lng = getlng;
+
+  // The map, centered at Uluru
+  map = new Map(document.getElementById("map"), {
+  zoom: 13,
+  center: position,
+  mapId: "DEMO_MAP_ID",
+});
+
+// The marker, positioned at Uluru
+const marker = new AdvancedMarkerView({
+  map: map,
+  position: position,
+  title: "Uluru",
+});
+
     })
     .catch(function(error){
         console.log(error)
     })
 }
-
-
-
-  // The map, centered at Uluru
-  map = new Map(document.getElementById("map"), {
-    zoom: 4,
-    center: position,
-    mapId: "DEMO_MAP_ID",
-  });
-
-  // The marker, positioned at Uluru
-  const marker = new AdvancedMarkerView({
-    map: map,
-    position: position,
-    title: "Uluru",
-  });
-
-
+geocode()
 }
 
 initMap();

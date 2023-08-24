@@ -1,4 +1,6 @@
-﻿namespace prj_FUNShare.ViewModels
+﻿using prj_FUNShare.Models;
+
+namespace prj_FUNShare.ViewModels
 {
     public class COrderItmeVIewModel
     {
@@ -12,6 +14,8 @@
         //public double? Rank { get; set; }
         public string? ImagePath { get; set; }
         //public string IsClass { get; set; }
+
+        public bool? isAttend { get; set; }
 
         public decimal? _UnitPrice;
         public string UnitPrice
@@ -28,9 +32,10 @@
         //public string? SubCategoryName { get; set; }
         //public int orderCount { get; set; }
 
-        public int orderId { get; set; } 
+        public int orderId { get; set; }
 
-        //public string Address { get; set; } 
+        public string? Address { get; set; }
+        public string? districtName { get; set; }
         public string SupplierName { get; set; }
 
         public DateTime?  beginTime { get; set; }
@@ -39,5 +44,7 @@
 
         public string  OrderStatus { get; set; }
         public string OrderDetailStatus { get; set; }
+
+        public int? processStatus { get; set; }
     }
 }

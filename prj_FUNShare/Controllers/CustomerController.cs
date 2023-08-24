@@ -106,6 +106,9 @@ namespace prj_FUNShare.Controllers
             return datas != null ?
                 View(await datas.ToListAsync()) :
                 Problem("Entity set 'DemoContext.Product'  is null.");
+
+
+
         }
 
         public IActionResult asyncmyOrderDetail(int? orderId)

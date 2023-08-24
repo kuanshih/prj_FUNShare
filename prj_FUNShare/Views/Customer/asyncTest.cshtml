@@ -117,7 +117,7 @@
         }
 
         //共用table function
-        async function orderTable(tbody,conditionSatus ,conditionTime) {
+        async function orderTable(tbody, conditionSatus, conditionTime, processStatus) {
        
             try{
             const currentTime = new Date(currentTimeElement.textContent); // Get current time from the stored element's content
@@ -144,7 +144,7 @@
                             return(
                 
                             `
-                         <tr onclick="showOrderDetail('${data.orderId}')">
+                                                 <tr onclick="showOrderDetail('${data.orderId}')" data-processstatus="${processStatus}">
                                     <th>
                                             ${data.productName}
                                             <p>
@@ -185,14 +185,14 @@
         }
 
         async function orderFuture() {
-            await orderTable(futuretbody, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) >= currentTime);
+            await orderTable(futuretbody, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) >= currentTime,1);
         }
 
         async function orderPast() {
-            await orderTable(pasttbody, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) <= currentTime);
+            await orderTable(pasttbody, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) <= currentTime,2);
         }
         async function orderCanceled() {
-            await orderTable(canceledtbody, data => data.orderStatus === "取消", (data, currentTime) => new Date(data.beginTime) <= currentTime || Date(data.beginTime) > currentTime);
+            await orderTable(canceledtbody, data => data.orderStatus === "取消", (data, currentTime) => new Date(data.beginTime) <= currentTime || Date(data.beginTime) > currentTime,3);
         }
 
         (async () => {
@@ -208,9 +208,17 @@
     </script>
 
     <script>
+        // function showOrderDetail(orderId, processStatus) {
+        //     window.location.href = `@Url.Content("~/Customer/asyncmyOrderDetail?orderId=")` + orderId + `&processStatus=${processStatus}`;
+        // }
+
         function showOrderDetail(orderId) {
-            window.location.href = `@Url.Content("~/Customer/asyncmyOrderDetail?orderId=")` + orderId;
+            const row = event.currentTarget;
+            const processStatus = row.getAttribute('data-processstatus');
+            window.location.href = `@Url.Content("~/Customer/asyncmyOrderDetail?orderId=")` + orderId + `&processStatus=${processStatus}`;
         }
+
+
     </script>
 
     <script>

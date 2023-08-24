@@ -82,9 +82,10 @@ namespace prj_FUNShare.Controllers
                         };
                         return Json(datas);
         }
-        public IActionResult getmyOrderDetail(int? orderId)
+        public IActionResult getmyOrderDetail(int? orderId, int? processStatus)
         {
             int memberId = 8; //todo 先寫死
+            int process = 0;
             var query = _context.Order
         .Include(x => x.OrderDetail)
             .ThenInclude(x => x.ProductDetail)
@@ -92,7 +93,10 @@ namespace prj_FUNShare.Controllers
             if (orderId.HasValue)
             {
                 query = query.Where(order => order.OrderId == orderId);
+                process = (int)processStatus;
             }
+
+
             var datas = query
                     .OrderByDescending(order => order.OrderDetail.First().ProductDetail.BeginTime)
         .Select(order => new COrderItmeVIewModel
@@ -106,14 +110,18 @@ namespace prj_FUNShare.Controllers
             CategoryName = order.OrderDetail.First().ProductDetail.Product.ProductCategories.First().SubCategory.Category.CategoryName,
             CityName = order.OrderDetail.First().ProductDetail.District.City.CityName,
             SupplierName = order.OrderDetail.First().ProductDetail.Product.Supplier.SupplierName,
-            OrderTime =order.OrderTime,
+            OrderTime = order.OrderTime,
             beginTime = order.OrderDetail.First().ProductDetail.BeginTime,
             endTime = order.OrderDetail.First().ProductDetail.EndTime,
             _UnitPrice = (int)order.OrderDetail.First().ProductDetail.UnitPrice,
             OrderStatus = order.Status.Description,
             OrderDetailStatus = order.OrderDetail.First().Status.Description,
             ImagePath = order.OrderDetail.First().ProductDetail.Product.ImageList.First().ImagePath,
-        });
+            Address = order.OrderDetail.FirstOrDefault().ProductDetail.Address,
+            districtName = order.OrderDetail.First().ProductDetail.District.DistrictName,
+            isAttend = order.OrderDetail.First().IsAttend,
+            processStatus = process
+        }) ;
             return Json(datas);
 
 
