@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7-2.萬年曆</title>
+    <style>
+        table{
+            border-collapse:collapse;
+            border:2px solid yellow;
+            background-color: lightyellow;
+        }
+        td,th {
+            text-align: center;
+            padding: 5px;
+        }
+        th{
+            background-color: lightgoldenrodyellow;
+        }
+        .today{
+            font-weight: 900;
+            color: red;
+        }
+        .calender:hover{
+            background-color:yellow;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+</head>
+
+<body>
+    <h1>7-2. 萬年曆</h1>
+    <div>
+        <select id="yy">
+            <option value="2023">2023</option>
+        </select>年
+        <select id="mm">
+            <option value="6">6</option>
+        </select>月
+    </div>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>日</th>
+                <th>一</th>
+                <th>二</th>
+                <th>三</th>
+                <th>四</th>
+                <th>五</th>
+                <th>六</th>
+            </tr>
+        </thead>
+        <tbody id="data">
+        </tbody>
+    </table>
+
+    <h4 id="today">今天：</h4>
+    <sapn>選取日期：</span><input type="text" id="pick">
+
+    <script src="index.js"></script>
+</body>
+
+</html>
