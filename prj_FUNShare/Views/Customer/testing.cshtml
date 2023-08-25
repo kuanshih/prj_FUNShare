@@ -73,10 +73,22 @@
                 <div class="schedule panelSch">
                     <div class="title">
                         <div class="pickday">
-                            <h1>schedule</h1>
+                            <h1></h1>
                         </div>
                     </div>
-                    <div class="list"></div>
+                    <div class="list" id="list">
+                        <div class="time">
+                            <div>6am</div>
+                            <div>8am</div>
+                            <div>10am</div>
+                            <div>12pm</div>
+                            <div>14pm</div>
+                            <div>16pm</div>
+                            <div>18pm</div>
+                            <div>20pm</div>
+                            <div>22pm</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -292,10 +304,10 @@
             window.location.href = `@Url.Content("~/Customer/asyncmyOrderDetail?orderId=")` + orderId;
         }
     </script>
-    <script>
+    <script>/* 課表 */
+
+
             const date = new Date();
-
-
 
             const renderCalendar = () => {
 
@@ -318,6 +330,8 @@
                 console.log(lastDayIndex)
                 const nextDays = 7 - lastDayIndex - 1;
 
+    
+
                 const months = [
                     "January",
                     "February",
@@ -338,48 +352,133 @@
 
                 let days = "";
 
-
                 for (let x = firstDayIndex; x > 0; x--) {
-                    days += `<div class="prev-date flip">${prevLastDay - x + 1}</div>`
+                    let pick = date.getFullYear() + '-' + (date.getMonth().toString().padStart(2, '0')) + '-' + (prevLastDay - x + 1);
+                    days += `<div class="prev-date flip" data-id="${pick}">${prevLastDay - x + 1}</div>`
+
                 }
 
 
                 for (let i = 1; i <= lastDay; i++) {
                     if (i === new Date().getDate() && date.getMonth() === new Date().getMonth()) {
-                        days += `<div class="today flip">${i}</div>`;
+                        let pick = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + i;
+                        days += `<div class="today flip" data-id="${pick}">${i}</div>`;
                     }
                     else {
-                        days += `<div class="flip">${i}</div>`;
+                        let pick = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + i;
+                        days += `<div class="flip" data-id="${pick}">${i}</div>`;
                     }
                 }
 
                 for (let j = 1; j <= nextDays; j++) {
-                    days += `<div class="next-date flip">${j}</div>`
-                    monthDays.innerHTML = days;
+                    let pick = date.getFullYear() + '-' + (date.getMonth() + 2).toString().padStart(2, '0') + '-' + j;
+                    days += `<div class="next-date flip" data-id="${pick}">${j}</div>`
+
                 }
+                monthDays.innerHTML = days;
 
-                //收合script
-                $('.flip').click(function () {
-                    $(".schedule").slideToggle("slow");
-                    flipClicked = true;
-                });
+
             }
-
 
             document.querySelector('.prev').addEventListener('click', () => {
                 date.setMonth(date.getMonth() - 1);
                 renderCalendar();
-
+                flip();
             });
 
             document.querySelector('.next').addEventListener('click', () => {
                 date.setMonth(date.getMonth() + 1);
+                console.log(this)
                 renderCalendar();
-
+                flip();
             });
 
             renderCalendar();
+            flip();
+            //收合script
+            let x = 0;
+            let clicked = false;
+            function flip() {
+                $('.flip').click(function () {
+                    if (!clicked) {
+                        console.log(this)
+                        $(".schedule").slideToggle("slow");
+                        x = $(this).data().id
+                        console.log(x)
+                        $(".schedule h1").html(x + ' schedule')
+                        // if (x === '2023-08-26') {
+                        $('#list').empty()
+                        $('#list').append(`<li>${x}</li>`)
+                        // }
+                        clicked = true
+                    }
+                    else {
+                        if ($(this).data().id === x) {
+                            $(".schedule").slideToggle("slow");
 
+                            clicked = false;
+                        }
+                        else {
+                            x = $(this).data().id
+                            $('#list').empty()
+                            $(".schedule h1").html(x + ' schedule')
+                            $('#list').append(`<li>${x}</li>`)
+                            clicked = true;
+                        }
+                    }
+                })
+            };
+        getcourses();
+            //暫時 todo....
+            const t = Date.now
+            console.log(t)
+        async function getcourses() {
+                let response = await fetch(`@Url.Content("~/api/getCourses?id=")8` + `&date=${t}`)
+                let datas =await response.json()
+                const filteredData = datas.filter(data =>
+                    data.productId != null && data.orderStatus !== "取消"
+                );
+            const item = filteredData.map(data => {
+            return(
+                        `<li>${data.beginTime}</li>
+                        <li>${data.endTime}</li>
+                        <li>${data.productName}</li>
+                `
+            )
+            })
+                console.log(item)
+            ;
+        }
+
+        //     async function schedule() {
+
+        //         try {
+        //             const currentTime = new Date(currentTimeElement.textContent); // Get current time from the stored element's content
+
+        //             let response = await fetch('@Url.Content("~/api/getmyOrderDetail")')
+        //             let datas = await response.json()
+        //             const filteredData = datas.filter(data =>
+        //                 data.productId != null && data.orderStatus !== "取消"
+        //             );
+
+        //             const item = filteredData.map(data => {
+        //                 //時間格式化
+        //                 const beginTime = new Date(data.beginTime);
+        //                 const endTime = new Date(data.endTime);
+        //                 const productName = data.productName;
+
+        //                 return (beginTime)
+
+        //             })
+        //             console.log(item)
+        //             // tbody.innerHTML = item.join("");
+
+        //         }
+        //         catch (error) {
+        //             alert("An error occurred:", error)
+        //         }
+        //     }
+        // schedule();
         </script>
     }
 
@@ -486,7 +585,7 @@
             .title {
                 width: 100%;
                 height: 12rem;
-                background-color: #d2dad7;
+                background-color: #9ba7a3;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -501,6 +600,34 @@
                     text-transform: uppercase;
                     letter-spacing: 0.2rem;
                     margin-bottom: 1rem;
+                }
+
+            .list {
+                margin-left: 2rem;
+                margin-top: 1.8rem;
+                padding-left: 3rem;
+            }
+
+                .list li {
+                    font-size: 2rem;
+                    font-weight: 400;
+                    letter-spacing: 0.1rem;
+                    height: calc(38rem/9);
+                    text-shadow: 0 0.3rem 0.5rem rgba(0,0,0,0.5);
+                }
+
+            .time {
+                height: 5rem;
+                padding: 0 0.4rem;
+                align-items: center;
+            }
+
+                .time div {
+                    font-size: 1.5rem;
+                    font-weight: 400;
+                    letter-spacing: 0.1rem;
+                    height: calc(38rem/9);
+                    text-shadow: 0 0.3rem 0.5rem rgba(0,0,0,0.5);
                 }
         </style>
     }

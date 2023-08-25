@@ -141,6 +141,15 @@ html{
     
 }
 
+.list li{
+    font-size: 2rem;
+    font-weight: 400;
+    letter-spacing: 0.1rem;
+    height:calc(38rem/9);
+    text-shadow: 0 0.3rem 0.5rem rgba(0,0,0,0.5);
+    
+}
+
 .time{
     height:5rem;
     padding:0 0.4rem;
