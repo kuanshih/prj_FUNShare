@@ -164,13 +164,13 @@ namespace prj_FUNShare.Controllers
                         };
             return Json(datas);
         }
-        public IActionResult getCourses(int? id, DateTime date)
+        public IActionResult getCourses(int? id,DateTime date)
         {
             id = 8; //todo 先寫死
             var datas = from order in _context.Order
                         .Include(x => x.OrderDetail)
                         .ThenInclude(x => x.ProductDetail)
-                        where order != null && order.MemberId == id &&order.OrderDetail.First().ProductDetail.BeginTime>=date && order.OrderDetail.First().ProductDetail.EndTime<=date
+                        where order != null && order.MemberId == id && order.OrderDetail.First().ProductDetail.BeginTime >= date && order.OrderDetail.First().ProductDetail.EndTime <= date
                         orderby order.OrderDetail.First().ProductDetail.BeginTime descending
 
                         select new COrderItmeVIewModel
