@@ -453,19 +453,20 @@
                     const filteredData = datas.filter(data =>
                         data.productId !== null && data.orderStatus !== "取消");
                     
-                const item = filteredData.map(data => {
+                let item = filteredData.map(data => {
                     const beginTime = new Date(data.beginTime);
                     const endTime = new Date(data.endTime);
             return(
-                        `<span>${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')} 至
-                                                            ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')} 
+                        `<li>${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')} 至
+                                                            ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')} <br>
                                                                        ${data.productName}
-                        </span>
+                                    </li><br>
                 `
             )
             })
                 console.log(item)
-                $('#list').append(`<li>${item}</li>`)
+                item = item.join("")
+                $('#list').append(`${item}`)
             ;
         }
 
@@ -628,7 +629,7 @@
             }
 
                 .list li {
-                    font-size: 0.5rem;
+                    font-size: 1rem;
                     font-weight: 400;
                     letter-spacing: 0.1rem;
                     height: calc(38rem/9);
