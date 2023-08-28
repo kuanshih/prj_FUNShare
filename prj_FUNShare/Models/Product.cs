@@ -2,7 +2,6 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace prj_FUNShare.Models;
 
@@ -45,6 +44,8 @@ public partial class Product
     public virtual Age Age { get; set; }
 
     public virtual ICollection<Comment> Comment { get; set; } = new List<Comment>();
+
+    public virtual ICollection<CouponList> CouponList { get; set; } = new List<CouponList>();
 
     public virtual ICollection<ImageList> ImageList { get; set; } = new List<ImageList>();
 

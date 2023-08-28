@@ -17,13 +17,21 @@ public partial class Order
 
     public int StatusId { get; set; }
 
+    public decimal? Amount { get; set; }
+
+    public decimal? BillingAmount { get; set; }
+
     public int? CouponId { get; set; }
+
+    public int? Count { get; set; }
 
     public virtual ICollection<Bonus> Bonus { get; set; } = new List<Bonus>();
 
     public virtual CouponList Coupon { get; set; }
 
     public virtual CustomerInfomation Member { get; set; }
+
+    public virtual ICollection<Message> Message { get; set; } = new List<Message>();
 
     public virtual ICollection<OrderDetail> OrderDetail { get; set; } = new List<OrderDetail>();
 

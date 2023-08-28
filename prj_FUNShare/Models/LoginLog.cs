@@ -13,7 +13,5 @@ public partial class LoginLog
 
     public DateTime? LoginTime { get; set; }
 
-    public string Ip { get; set; }
-
-    public string Location { get; set; }
+    public string Device { get; set; }
 }

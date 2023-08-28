@@ -15,6 +15,12 @@ public partial class SubCategory
 
     public int CategoryId { get; set; }
 
+    public string AbilityOne { get; set; }
+
+    public string AbilityTwo { get; set; }
+
+    public string AbilityThree { get; set; }
+
     public virtual Categories Category { get; set; }
 
     public virtual ICollection<Interest> Interest { get; set; } = new List<Interest>();

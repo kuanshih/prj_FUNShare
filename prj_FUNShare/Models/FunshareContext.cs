@@ -8,10 +8,6 @@ namespace prj_FUNShare.Models;
 
 public partial class FUNShareContext : DbContext
 {
-    public FUNShareContext()
-    {
-    }
-
     public FUNShareContext(DbContextOptions<FUNShareContext> options)
         : base(options)
     {
@@ -79,20 +75,17 @@ public partial class FUNShareContext : DbContext
 
     public virtual DbSet<Survey> Survey { get; set; }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Data Source=192.168.31.93;Initial Catalog=FUNShare;User ID=FUNShareDB;Password=987654321;Trust Server Certificate=True");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Achievement>(entity =>
         {
-            entity.Property(e => e.AchievementId)
-                .ValueGeneratedNever()
-                .HasColumnName("Achievement_ID");
+            entity.Property(e => e.AchievementId).HasColumnName("Achievement_ID");
             entity.Property(e => e.AchievementDescription)
                 .HasMaxLength(50)
                 .HasColumnName("Achievement_Description");
+            entity.Property(e => e.AchievementFileName)
+                .HasMaxLength(50)
+                .HasColumnName("Achievement_FileName");
             entity.Property(e => e.AchievementName)
                 .IsRequired()
                 .HasMaxLength(10)
@@ -101,9 +94,7 @@ public partial class FUNShareContext : DbContext
 
         modelBuilder.Entity<AchievementList>(entity =>
         {
-            entity.Property(e => e.AchievementListId)
-                .ValueGeneratedNever()
-                .HasColumnName("AchievementList_ID");
+            entity.Property(e => e.AchievementListId).HasColumnName("AchievementList_ID");
             entity.Property(e => e.AchievementId).HasColumnName("Achievement_ID");
             entity.Property(e => e.ProductId).HasColumnName("Product_ID");
 
@@ -115,7 +106,7 @@ public partial class FUNShareContext : DbContext
             entity.HasOne(d => d.Product).WithMany(p => p.AchievementList)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_AchievementList_Product");
+                .HasConstraintName("FK_AchievementList_Product1");
         });
 
         modelBuilder.Entity<AdvertiseOrder>(entity =>
@@ -272,10 +263,14 @@ public partial class FUNShareContext : DbContext
 
             entity.Property(e => e.CouponId).HasColumnName("Coupon_ID");
             entity.Property(e => e.Description).HasMaxLength(50);
-            entity.Property(e => e.Discount).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Discount).HasColumnType("money");
             entity.Property(e => e.DueDate).HasColumnType("date");
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.ProductId).HasColumnName("Product_ID");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.CouponList)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_Coupon_List_Product");
         });
 
         modelBuilder.Entity<CustomerInfomation>(entity =>
@@ -290,13 +285,11 @@ public partial class FUNShareContext : DbContext
             entity.Property(e => e.BirthDate)
                 .HasColumnType("date")
                 .HasColumnName("Birth_Date");
-            entity.Property(e => e.DisctrictId).HasColumnName("Disctrict_ID");
+            entity.Property(e => e.DistrictId).HasColumnName("District_ID");
             entity.Property(e => e.Email)
                 .IsRequired()
                 .IsUnicode(false);
-            entity.Property(e => e.Gender)
-                .IsRequired()
-                .HasMaxLength(4);
+            entity.Property(e => e.Gender).HasMaxLength(4);
             entity.Property(e => e.IsAllergy).HasColumnName("IsAllergy?");
             entity.Property(e => e.Name)
                 .IsRequired()
@@ -314,15 +307,14 @@ public partial class FUNShareContext : DbContext
                 .HasColumnName("Phone_Number");
             entity.Property(e => e.RegistrationDay).HasColumnType("date");
             entity.Property(e => e.ResidentId)
-                .IsRequired()
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("Resident_ID");
             entity.Property(e => e.StatusId).HasColumnName("Status_ID");
             entity.Property(e => e.SuspensionReason).HasMaxLength(30);
 
-            entity.HasOne(d => d.Disctrict).WithMany(p => p.CustomerInfomation)
-                .HasForeignKey(d => d.DisctrictId)
+            entity.HasOne(d => d.District).WithMany(p => p.CustomerInfomation)
+                .HasForeignKey(d => d.DistrictId)
                 .HasConstraintName("FK_Customer_Infomation_District");
 
             entity.HasOne(d => d.Parent).WithMany(p => p.InverseParent)
@@ -331,7 +323,6 @@ public partial class FUNShareContext : DbContext
 
             entity.HasOne(d => d.Status).WithMany(p => p.CustomerInfomation)
                 .HasForeignKey(d => d.StatusId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Customer_Infomation_Status");
         });
 
@@ -400,17 +391,14 @@ public partial class FUNShareContext : DbContext
             entity.ToTable("Login_Log");
 
             entity.Property(e => e.LoginId).HasColumnName("Login_ID");
-            entity.Property(e => e.Ip).HasMaxLength(30);
-            entity.Property(e => e.Location).HasMaxLength(30);
+            entity.Property(e => e.Device).HasMaxLength(20);
             entity.Property(e => e.LoginTime).HasColumnType("datetime");
             entity.Property(e => e.MemberId).HasColumnName("Member_ID");
         });
 
         modelBuilder.Entity<MemberAchievement>(entity =>
         {
-            entity.Property(e => e.MemberAchievementId)
-                .ValueGeneratedNever()
-                .HasColumnName("MemberAchievement_ID");
+            entity.Property(e => e.MemberAchievementId).HasColumnName("MemberAchievement_ID");
             entity.Property(e => e.AchievementId).HasColumnName("Achievement_ID");
             entity.Property(e => e.MemberId).HasColumnName("Member_ID");
 
@@ -450,11 +438,19 @@ public partial class FUNShareContext : DbContext
             entity.Property(e => e.Datetime).HasColumnType("datetime");
             entity.Property(e => e.MessageContent).HasColumnName("Message_Content");
             entity.Property(e => e.OrderId).HasColumnName("Order_ID");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.Message)
+                .HasForeignKey(d => d.OrderId)
+                .HasConstraintName("FK_Message_Order");
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
             entity.Property(e => e.OrderId).HasColumnName("Order_ID");
+            entity.Property(e => e.Amount).HasColumnType("money");
+            entity.Property(e => e.BillingAmount)
+                .HasColumnType("money")
+                .HasColumnName("Billing_Amount");
             entity.Property(e => e.CouponId).HasColumnName("Coupon_ID");
             entity.Property(e => e.MemberId).HasColumnName("Member_ID");
             entity.Property(e => e.OrderTime)
@@ -486,6 +482,7 @@ public partial class FUNShareContext : DbContext
             entity.ToTable("Order_Detail");
 
             entity.Property(e => e.OrderDetailId).HasColumnName("Order_Detail_ID");
+            entity.Property(e => e.Amount).HasColumnType("money");
             entity.Property(e => e.IsAttend).HasColumnName("isAttend?");
             entity.Property(e => e.MemberId).HasColumnName("Member_ID");
             entity.Property(e => e.OrderId).HasColumnName("Order_ID");
@@ -586,7 +583,7 @@ public partial class FUNShareContext : DbContext
             entity.HasOne(d => d.SubCategory).WithMany(p => p.ProductCategories)
                 .HasForeignKey(d => d.SubCategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ProductCategories_SubCategory");
+                .HasConstraintName("FK_ProductCategories_SubCategory1");
         });
 
         modelBuilder.Entity<ProductDetail>(entity =>
@@ -650,6 +647,15 @@ public partial class FUNShareContext : DbContext
         modelBuilder.Entity<SubCategory>(entity =>
         {
             entity.Property(e => e.SubCategoryId).HasColumnName("SubCategory_ID");
+            entity.Property(e => e.AbilityOne)
+                .HasMaxLength(10)
+                .HasColumnName("Ability_One");
+            entity.Property(e => e.AbilityThree)
+                .HasMaxLength(10)
+                .HasColumnName("Ability_Three");
+            entity.Property(e => e.AbilityTwo)
+                .HasMaxLength(10)
+                .HasColumnName("Ability_Two");
             entity.Property(e => e.CategoryId).HasColumnName("Category_ID");
             entity.Property(e => e.SubCategoryDescription)
                 .HasMaxLength(50)

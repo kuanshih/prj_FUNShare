@@ -177,7 +177,7 @@
                     <h2 id="order">訂單</h2>
                     <ul>
                         <p><i class="fas fa-arrow-right-long"></i>  訂單編號: 20235462124</p>
-                        <p><i class="far fa-user"></i>  人數: 2人</p>
+                        <p><i class="far fa-user" id="person"></i> </p>
                     </ul>
                 </div>
                 <div>
@@ -185,9 +185,9 @@
                     <h2>帳單</h2>
                     <ul>
                         <p id="ordertime"></p>
-                        <p>訂單金額: TWD 580</p>
-                        <p>結帳金額: TWD 580</p>
-                        <p>紅利回饋: 580</p>
+                        <p id="orderPrice"></p>
+                        <p id="finalPrice"></p>
+                        <p id="Bonus"></p>
                     </ul>
                 </div>
                 <div>
@@ -226,14 +226,14 @@
         async function orderDetail(){
             const response = await fetch(`@Url.Content("~/api/getmyOrderDetail?orderId=")${orderId}` + `&processStatus=${processStatus}`)
             const datas = await response.json();
-            console.log(datas)
+            // console.log(datas)
             //時間格式化
             const beginTime = new Date(datas[0].beginTime);
             const endTime = new Date(datas[0].endTime);
             const ordertime = new Date(datas[0].orderTime);
             const place = datas[0].cityName + datas[0].districtName
             const isattend = datas[0].isAttend;
-            console.log(isattend)
+            // console.log(isattend)
 
 
             // status
@@ -265,13 +265,18 @@
                 document.querySelector("#status").innerHTML = "已留言囉"
             }
             // status
-    
+            let orderPrice = datas[0].count * datas[0].unitPrice
+            let bonus = orderPrice/200
             //測試
             document.querySelector("#title").innerHTML = datas[0].productName
             document.querySelector("#div1").innerHTML = datas[0].features
             document.querySelector("#img1").innerHTML = `<img src="../img/product/${datas[0].imagePath}"class="d-block w-100" alt="First img" />`
             document.querySelector("#signpStatus").innerHTML = `    ${datas[0].orderDetailStatus}`
             document.querySelector("#paymentStatus").innerHTML = `    ${datas[0].orderStatus}`
+            document.querySelector("#person").innerHTML = `   人數:  ${datas[0].count} 人`
+            document.querySelector("#orderPrice").innerHTML = `   訂購金額:  ${orderPrice} TWD`
+            document.querySelector("#finalPrice").innerHTML = `   結帳金額:  ${orderPrice} TWD`
+            document.querySelector("#Bonus").innerHTML = `   紅利回饋:  ${bonus} 點`
             document.querySelector("#ordertime").innerHTML = `訂購時間: ${ordertime.getFullYear()} -${(ordertime.getMonth() + 1).toString().padStart(2, '0')} -${ordertime.getDate().toString().padStart(2, '0')} ${ordertime.getHours().toString().padStart(2, '0')}:${ordertime.getMinutes().toString().padStart(2, '0')}`
             document.querySelector("#eventTime").innerHTML = `<P> ${beginTime.getFullYear()} -${(beginTime.getMonth() + 1).toString().padStart(2, '0')} -${beginTime.getDate().toString().padStart(2, '0')} ${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')}</P>
                                                                 <p class="justify-content-center">至</p>

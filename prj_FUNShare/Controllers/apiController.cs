@@ -82,10 +82,10 @@ namespace prj_FUNShare.Controllers
                         };
                         return Json(datas);
         }
-        public IActionResult getmyOrderDetail(int? orderId, int? processStatus)
+        public IActionResult getmyOrderDetail(int? orderId)
         {
             int memberId = 8; //todo 先寫死
-            int process = 0;
+           
             var query = _context.Order
         .Include(x => x.OrderDetail)
             .ThenInclude(x => x.ProductDetail)
@@ -93,7 +93,7 @@ namespace prj_FUNShare.Controllers
             if (orderId.HasValue)
             {
                 query = query.Where(order => order.OrderId == orderId);
-                process = (int)processStatus;
+                
             }
 
 
@@ -120,7 +120,8 @@ namespace prj_FUNShare.Controllers
             Address = order.OrderDetail.FirstOrDefault().ProductDetail.Address,
             districtName = order.OrderDetail.First().ProductDetail.District.DistrictName,
             isAttend = order.OrderDetail.First().IsAttend,
-            processStatus = process
+            count =order.Count
+            
         }) ;
             return Json(datas);
 

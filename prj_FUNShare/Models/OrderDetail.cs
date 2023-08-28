@@ -19,6 +19,8 @@ public partial class OrderDetail
 
     public int? Grade { get; set; }
 
+    public decimal? Amount { get; set; }
+
     public bool? IsAttend { get; set; }
 
     public virtual CustomerInfomation Member { get; set; }

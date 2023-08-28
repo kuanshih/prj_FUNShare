@@ -21,23 +21,23 @@ public partial class CustomerInfomation
 
     public string Email { get; set; }
 
-    public int? DisctrictId { get; set; }
+    public int? DistrictId { get; set; }
 
     public string Address { get; set; }
 
-    public DateTime BirthDate { get; set; }
+    public DateTime? BirthDate { get; set; }
 
     public string Nickname { get; set; }
 
     public string Password { get; set; }
 
-    public bool IsAllergy { get; set; }
+    public bool? IsAllergy { get; set; }
 
     public string AllergyDescription { get; set; }
 
     public string Note { get; set; }
 
-    public int StatusId { get; set; }
+    public int? StatusId { get; set; }
 
     public byte[] Photo { get; set; }
 
@@ -49,7 +49,7 @@ public partial class CustomerInfomation
 
     public virtual ICollection<Comment> Comment { get; set; } = new List<Comment>();
 
-    public virtual District Disctrict { get; set; }
+    public virtual District District { get; set; }
 
     public virtual ICollection<Interest> Interest { get; set; } = new List<Interest>();
 

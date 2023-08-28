@@ -13,6 +13,8 @@ public partial class Achievement
 
     public string AchievementDescription { get; set; }
 
+    public string AchievementFileName { get; set; }
+
     public virtual ICollection<AchievementList> AchievementList { get; set; } = new List<AchievementList>();
 
     public virtual ICollection<MemberAchievement> MemberAchievement { get; set; } = new List<MemberAchievement>();

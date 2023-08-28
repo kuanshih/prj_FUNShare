@@ -16,4 +16,6 @@ public partial class Message
     public string MessageContent { get; set; }
 
     public DateTime? Datetime { get; set; }
+
+    public virtual Order Order { get; set; }
 }

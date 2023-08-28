@@ -45,6 +45,6 @@ namespace prj_FUNShare.ViewModels
         public string  OrderStatus { get; set; }
         public string OrderDetailStatus { get; set; }
 
-        public int? processStatus { get; set; }
+        public int? count { get; set; }
     }
 }
