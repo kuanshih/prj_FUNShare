@@ -55,6 +55,7 @@
              id="ex3-tabs-2"
              role="tabpanel"
              aria-labelledby="ex3-tab-2">
+            <h1 class="d-flex justify-content-center align-items-center">我的課表</h1>
             <div class="container d-flex">
                 <div class="calendar">
                     <div class="month">
@@ -359,12 +360,12 @@
                 document.querySelector('.date p').innerHTML = new Date().toDateString();
 
                 let days = "";
+                let scan = [];
 
                 for (let x = firstDayIndex; x > 0; x--) {
                     let pick = date.getFullYear() + '-' + (date.getMonth().toString().padStart(2, '0')) + '-' + (prevLastDay - x + 1);
-                    days += `<div class="prev-date flip" data-id="${pick}">${prevLastDay - x + 1}</div>`
-                    const d = new Date(pick).toISOString();
-                    schedule(d);
+                    days += `<div class="prev-date flip" data-id="${pick} id="${pick}">${prevLastDay - x + 1}</div>`
+                    scan.push(pick)
                 }
 
 
@@ -372,25 +373,29 @@
                     if (i === new Date().getDate() && date.getMonth() === new Date().getMonth()) {
                         let pick = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + i;
                         days += `<div class="today flip" data-id="${pick}" id="${pick}">${i}</div>`;
-                        const d = new Date(pick).toISOString();
-                        schedule(d);
+                        scan.push(pick)
+
                     }
                     else {
                         let pick = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + i;
                         days += `<div class="flip" data-id="${pick}" id="${pick}">${i}</div>`;
-                        const d = new Date(pick).toISOString();
-                        schedule(d);
+                        scan.push(pick)
+
                     }
                 }
 
                 for (let j = 1; j <= nextDays; j++) {
                     let pick = date.getFullYear() + '-' + (date.getMonth() + 2).toString().padStart(2, '0') + '-' + j;
                     days += `<div class="next-date flip" data-id="${pick}" id="${pick}">${j}</div>`
-                    const d = new Date(pick).toISOString();
-                    schedule(d);
+                    scan.push(pick)
+
                 }
                 monthDays.innerHTML = days;
-
+                // for (let i = 0; i < scan.length;i++){
+                //     let d=scan[i]
+                //      d = new Date(d).toISOString();
+                //     schedule(d,scan[i]);
+                // }
 
             }
 
@@ -483,18 +488,25 @@
             ;
         }
 
-            async function schedule(date) {
+            async function schedule(){
 
-                     let response = await fetch(`@Url.Content("~/api/getCourses?id=8")&date=${date}`)
+                     let response = await fetch(`@Url.Content("~/api/getCourses?id=8")`)
             console.log(response)
 
             let datas = await response.json();
             const filteredData = datas.filter(data =>
                 data.productId !== null && data.orderStatus !== "取消");
+                return filteredData
+                // if (filteredData.length > 0) {
+                //     $(`#${pick}`).css({
+                //         "color": "white",
+                //         "background-color": "#73BF00",
+                //         "font-family": "Arial",
+                //         "font-size": "20px",
+                //         "padding": "5px"
+                //     });
+                // }
 
-                if (filteredData.length > 0) {
-                    $(`#${date}`).append("%");
-                }
             // let item = filteredData.map(data => {
             //     const beginTime = new Date(data.beginTime);
             //     const endTime = new Date(data.endTime);
@@ -512,6 +524,9 @@
             // // $('#list').append(`${item}`)
             //     ;
             }
+
+            console.log(schedule())
+            
         
         </script>
 
