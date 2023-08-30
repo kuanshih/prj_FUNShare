@@ -43,7 +43,7 @@ namespace prj_FUNShare.Controllers
                             CategoryName = prod.ProductCategories.First().SubCategory.Category.CategoryName,
                             SubCategoryName = prod.ProductCategories.First().SubCategory.SubCategoryName,
                             CityName = prod.ProductDetail.Select(x => x.District.City.CityName).Distinct().Count() > 1 ? "多縣市" : prod.ProductDetail.Select(x => x.District.City.CityName).First(),
-                            Rank = prod.Comment.Select(x => x.Rank).Average(),
+                            //Rank = prod.Comment.Select(x => x.Rank).Average(),
                             ImagePath = prod.ImageList.Where(x => x.IsMain == true).First().ImagePath,
                             IsClass = prod.IsClass ? "課程" : "體驗",
                             IsPocketed = prod.PocketList.Where(x => x.MemberId == id).Any(),
@@ -157,7 +157,7 @@ namespace prj_FUNShare.Controllers
                             CategoryName = prod.ProductCategories.First().SubCategory.Category.CategoryName,
                             SubCategoryName = prod.ProductCategories.First().SubCategory.SubCategoryName,
                             CityName = prod.ProductDetail.Select(x => x.District.City.CityName).Distinct().Count() > 1 ? "多縣市" : prod.ProductDetail.Select(x => x.District.City.CityName).First(),
-                            Rank = prod.Comment.Select(x => x.Rank).Average(),
+                            //Rank = prod.Comment.Select(x => x.Rank).Average(),
                             ImagePath = prod.ImageList.Where(x => x.IsMain == true).First().ImagePath,
                             IsClass = prod.IsClass ? "課程" : "體驗",
                             IsPocketed = prod.PocketList.Where(x => x.MemberId == id).Any(),
@@ -165,7 +165,28 @@ namespace prj_FUNShare.Controllers
                         };
             return Json(datas);
         }
-        public IActionResult getCourses(int? id)
+        public IActionResult getCourses(int? id, DateTime date)
+        {
+            id = 8; //todo 先寫死
+            var datas = from order in _context.Order
+                        .Include(x => x.OrderDetail)
+                        .ThenInclude(x => x.ProductDetail)
+                        where order != null && order.MemberId == id /*&& order.OrderDetail.First().ProductDetail.BeginTime >= date && order.OrderDetail.First().ProductDetail.EndTime <= date*/
+                        orderby order.OrderDetail.First().ProductDetail.BeginTime descending
+
+                        select new CMyScheduleViewModel
+                        {
+                            //ProductId = 8,
+                            orderId = order.OrderId,
+                            ProductName = order.OrderDetail.First().ProductDetail.Product.ProductName,
+                            beginTime = order.OrderDetail.First().ProductDetail.BeginTime,
+                            endTime = order.OrderDetail.First().ProductDetail.EndTime,
+                            OrderStatus = order.Status.Description,
+                        };
+            return Json(datas);
+        }
+
+        public IActionResult getschedule(int? id)
         {
             id = 8; //todo 先寫死
             var datas = from order in _context.Order
@@ -174,16 +195,23 @@ namespace prj_FUNShare.Controllers
                         where order != null && order.MemberId == id/* && order.OrderDetail.First().ProductDetail.BeginTime >= date && order.OrderDetail.First().ProductDetail.EndTime <= date*/
                         orderby order.OrderDetail.First().ProductDetail.BeginTime descending
 
-                        select new COrderItmeVIewModel
+                        select new CMyScheduleViewModel
                         {
                             //ProductId = 8,
                             orderId = order.OrderId,
-                            ProductId = order.OrderDetail.First().ProductDetail.ProductId,
                             ProductName = order.OrderDetail.First().ProductDetail.Product.ProductName,
                             beginTime = order.OrderDetail.First().ProductDetail.BeginTime,
                             endTime = order.OrderDetail.First().ProductDetail.EndTime,
+                            OrderStatus = order.Status.Description,
                         };
             return Json(datas);
+        }
+
+        public IActionResult createComment(Comment comment)
+        {
+            _context.Comment.Add(comment);
+            _context.SaveChanges();
+            return Content("新增成功");
         }
     }
 }

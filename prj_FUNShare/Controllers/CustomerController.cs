@@ -124,5 +124,10 @@ namespace prj_FUNShare.Controllers
         {
             return View();
         }
+
+        public IActionResult createComment() 
+        {
+            return View();
+        }
     }
 }

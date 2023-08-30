@@ -208,6 +208,60 @@
 </div>
 <br />
 
+<!-- Comment -->
+<div class="modal top fade" id="CommentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="false">
+    <div class="modal-dialog modal-lg  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <form id="comment" mothed="post">
+                            
+                           @*  <div class="form-group">
+                                <label asp-for="CommentId" class="control-label"></label>
+                                <input asp-for="CommentId" class="form-control" />
+                                <span asp-validation-for="CommentId" class="text-danger"></span>
+                            </div> *@
+                            <div class="form-group">
+                                <label for="UserName" class="form-label">OrderId</label>
+                                <input type="number" class="form-control" id="OrderId" name="OrderId">
+                                
+                            </div>
+                            <div class="form-group">
+                                <label for="UserEmail" class="form-label">MemberId</label>
+                                <input type="number" class="form-control" id="MemberId" rows="3" name="MemberId" />
+                            </div>
+                            <div class="form-group">
+                                <label for="UserAge" class="form-label">Review</label>
+                                <input type="text" class="form-control" id="Review" rows="3" name="Review"></input>
+                            </div>
+                            <div class="form-group">
+                                <label for="UserAge" class="form-label">Rank</label>
+                                <input type="number" class="form-control" id="Rank" rows="3" name="Rank"></input>
+                            </div>
+                            <div class="form-group">
+                                <label for="UserAge" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="Date" rows="3" name="Date"></input>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                    Close
+                </button>
+                <input type="submit" value="送出" class="btn btn-primary" data-mdb-dismiss="comment" id="button1" />
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts{
     <script>
@@ -256,9 +310,8 @@
             else if (datas[0].orderStatus === "已付款" && datas[0].orderDetailStatus === "報名成功" && datas[0].isAttend) {
                 document.querySelector("#status").innerHTML = datas[0].orderStatus + datas[0].orderDetailStatus + datas[0].isAttend
                 document.querySelector("#review").innerHTML = `         <h2>體驗回饋</h2>
-                            <label>留下您寶貴的意見:</label>
-                            <input type="text" class="form-control justify-content-start align-items-start" style="height: 100px;">
-                            <button class="btn btn-floating ">送出</button>`
+                                                    <button data-mdb-toggle="modal" data-mdb-target="#CommentModal">留下您寶貴的意見:</button>
+                            `
             }
             //報名成功有參加已留言
             else if (datas[0].orderStatus === "已付款" && datas[0].orderDetailStatus === "報名後參加且留言" && datas[0].isAttend) {
@@ -340,6 +393,26 @@
 
         orderDetail();
     </script>
+      
+    <script>
+  const btn = document.querySelector('#button1')
+        btn.addEventListener('click', event => {
+            event.preventDefault();
+                const formdata = new FormData(document.querySelector('#comment'));
+                    fetch('@Url.Content("~/api/createComment")', {
+                    body: formdata,
+                    method: 'POST'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("新增成功")
+                              location.href='@Url.Content("/Customer/asyncmyOrderDetail")' 
+                    }
+                    else
+                        alert("新增失敗")
+                })
+        })
+        </script>
     <script>
         //收合script
     $(function(){

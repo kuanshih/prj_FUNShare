@@ -9,7 +9,7 @@ public partial class Comment
 {
     public int CommentId { get; set; }
 
-    public int ProductId { get; set; }
+    public int OrderId { get; set; }
 
     public int MemberId { get; set; }
 
@@ -21,5 +21,5 @@ public partial class Comment
 
     public virtual CustomerInfomation Member { get; set; }
 
-    public virtual Product Product { get; set; }
+    public virtual Order Order { get; set; }
 }

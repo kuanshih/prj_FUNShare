@@ -27,6 +27,8 @@ public partial class Order
 
     public virtual ICollection<Bonus> Bonus { get; set; } = new List<Bonus>();
 
+    public virtual ICollection<Comment> Comment { get; set; } = new List<Comment>();
+
     public virtual CouponList Coupon { get; set; }
 
     public virtual CustomerInfomation Member { get; set; }

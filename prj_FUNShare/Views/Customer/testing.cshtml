@@ -225,7 +225,7 @@
             
                 let response = await fetch('@Url.Content("~/api/getmyOrderDetail")')
             let  datas = await response.json()
-            console.log(datas)
+            // console.log(datas)
 
                 const filteredData = datas.filter(data =>
                     data.productId != null &&conditionSatus(data) /* data.orderStatus !== "取消"  */&& conditionTime(data, currentTime)
@@ -317,10 +317,14 @@
 
 
             const date = new Date();
+            let getDate;
+            
 
-            const renderCalendar = () => {
-
-
+            async function renderCalendar(){
+                const value = await schedule();
+                const getData = value;
+                console.log(getData);
+                
                 date.setDate(1);
 
                 const monthDays = document.querySelector(".days");
@@ -336,7 +340,7 @@
 
                 const lastDayIndex = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDay()
 
-                console.log(lastDayIndex)
+                // console.log(lastDayIndex)
                 const nextDays = 7 - lastDayIndex - 1;
 
     
@@ -360,80 +364,174 @@
                 document.querySelector('.date p').innerHTML = new Date().toDateString();
 
                 let days = "";
-                let scan = [];
+                
+                
 
                 for (let x = firstDayIndex; x > 0; x--) {
                     let pick = date.getFullYear() + '-' + (date.getMonth().toString().padStart(2, '0')) + '-' + (prevLastDay - x + 1);
-                    days += `<div class="prev-date flip" data-id="${pick} id="${pick}">${prevLastDay - x + 1}</div>`
-                    scan.push(pick)
+                    // days += `<div class="prev-date flip" data-id="${pick} id="${pick}">${prevLastDay - x + 1}</div>`
+                    let pickNew = new Date(pick);
+                    let t = 0;
+                    for (let i = 0; i < getData.length; i++) {
+                        let beginTime = new Date(getData[i].beginTime);
+                        let endTime = new Date(getData[i].endTime);
+                        console.log(pickNew)
+                        if (beginTime.getFullYear() == pickNew.getFullYear() && beginTime.getMonth() == pickNew.getMonth() && beginTime.getDate() == pickNew.getDate()) {
+                            console.log(beginTime.getFullYear())
+                            t = 1;
+                            break
+                        }
+                        else {
+                            t = 0;
+                        }
+                    }
+
+                    if (t == 1) {
+                        days += `<div class="prev-date flip" data-id="${pick}" id="${pick}" style="color: white,
+                                                   ;background-color: #73BF00">${prevLastDay - x + 1}</div>`
+                    }
+                    else {
+                        days += `<div class="prev-date flip" data-id="${pick}" id="${pick}">${prevLastDay - x + 1}</div>`
+                    }
                 }
 
-
+                let t = 0;
                 for (let i = 1; i <= lastDay; i++) {
                     if (i === new Date().getDate() && date.getMonth() === new Date().getMonth()) {
                         let pick = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + i;
-                        days += `<div class="today flip" data-id="${pick}" id="${pick}">${i}</div>`;
-                        scan.push(pick)
+                        let pickNew = new Date(pick);
+                        let t = 0;
+                        for (let i = 0; i < getData.length; i++) {
+                            let beginTime = new Date(getData[i].beginTime);
+                            let endTime = new Date(getData[i].endTime);
+                            console.log(pickNew)
+                            if (beginTime.getFullYear() == pickNew.getFullYear() && beginTime.getMonth() == pickNew.getMonth() && beginTime.getDate() == pickNew.getDate()) {
+                                console.log(beginTime.getFullYear())
+                                t = 1;
+                                break
+                            }
+                            else {
+                                t = 0;
+                            }
+                        }
+
+                        if (t == 1) {
+                            days += `<div class="today flip" data-id="${pick}" id="${pick}"  style="color: white,
+                                       ;background-color: #73BF00">${i}</div>`;
+                        }
+                        else {
+                            days += `<div class="today flip" data-id="${pick}" id="${pick}">${i}</div>`;
+                        }
 
                     }
                     else {
                         let pick = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + i;
-                        days += `<div class="flip" data-id="${pick}" id="${pick}">${i}</div>`;
-                        scan.push(pick)
-
+                        
+                        let pickNew = new Date(pick);
+                        let t = 0;
+                        for (let i = 0; i < getData.length; i++) {
+                            let beginTime = new Date(getData[i].beginTime);
+                            let endTime = new Date(getData[i].endTime);
+                            console.log(pickNew)
+                            if (beginTime.getFullYear() == pickNew.getFullYear() && beginTime.getMonth() == pickNew.getMonth() && beginTime.getDate() == pickNew.getDate()) {
+                                console.log(beginTime.getFullYear())
+                                t = 1;
+                                break
+                            }  
+                            else{
+                                t = 0;
+                            }
+                        }
+                        
+                        if (t == 1) {
+                            days += `<div class="flip" data-id="${pick}" id="${pick}" style="color: white,
+                           ;background-color: #73BF00">${i}</div>`;
+                        }
+                        else {
+                            days += `<div class="flip" data-id="${pick}" id="${pick}">${i}</div>`;
+                        }
                     }
                 }
 
                 for (let j = 1; j <= nextDays; j++) {
                     let pick = date.getFullYear() + '-' + (date.getMonth() + 2).toString().padStart(2, '0') + '-' + j;
-                    days += `<div class="next-date flip" data-id="${pick}" id="${pick}">${j}</div>`
-                    scan.push(pick)
+                    let pickNew = new Date(pick);
+                    let t = 0;
+                    for (let i = 0; i < getData.length; i++) {
+                        let beginTime = new Date(getData[i].beginTime);
+                        let endTime = new Date(getData[i].endTime);
+                        console.log(pickNew)
+                        if (beginTime.getFullYear() == pickNew.getFullYear() && beginTime.getMonth() == pickNew.getMonth() && beginTime.getDate() == pickNew.getDate()) {
+                            console.log(beginTime.getFullYear())
+                            t = 1;
+                            break
+                        }
+                        else {
+                            t = 0;
+                        }
+                    }
+
+                    if (t == 1) {
+                        days += `<div class="next-date flip" data-id="${pick}" id="${pick}"  style="color: white,
+                                       ;background-color: #73BF00">${j}!!!</div>`
+                    }
+                    else {
+                        days += `<div class="next-date flip" data-id="${pick}" id="${pick}">${j}</div>`
+                    }
 
                 }
                 monthDays.innerHTML = days;
-                // for (let i = 0; i < scan.length;i++){
-                //     let d=scan[i]
-                //      d = new Date(d).toISOString();
-                //     schedule(d,scan[i]);
-                // }
-
+                await flip();
             }
 
             document.querySelector('.prev').addEventListener('click', () => {
                 date.setMonth(date.getMonth() - 1);
                 renderCalendar();
-                flip();
+            
             });
 
             document.querySelector('.next').addEventListener('click', () => {
                 date.setMonth(date.getMonth() + 1);
                 console.log(this)
                 renderCalendar();
-                flip();
+             
             });
 
             renderCalendar();
-            flip();
+        
             //收合script
             let x = 0;
             let clicked = false;
-            function flip() {
+                async function flip() {
+                const value = await getcourses();
+                const getCourse = value;
+                console.log(getCourse)
                 $('.flip').click(function () {
                     if (!clicked) {
                         console.log(this)
                         $(".schedule").slideToggle("slow");
-                        x = $(this).data().id
-                        const date = new Date(x).toISOString();
-                        console.log(date)
-                        console.log(x)
+                        x = $(this).data().id;
+                        const date = new Date(x);
                         $(".schedule h1").html(x + ' schedule')
-                        // if (x === '2023-08-26') {
                         $('#list').empty()
-                        //$('#list').append(`<li>${x}</li>`)
-                        getcourses(date);
-                        // }
+                        let item ="";
+                        for (let i = 0; i < getCourse.length; i++) {
+                            let beginTime = new Date(getCourse[i].beginTime);
+                            let endTime = new Date(getCourse[i].endTime);
+                            if (beginTime.getFullYear() == date.getFullYear() && beginTime.getMonth() == date.getMonth() && beginTime.getDate() == date.getDate()) {
+                                item += `<li>${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')} 至
+                                                                        ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')} <br>
+                                                                                               ${getCourse[i].productName}
+                                                </li><br>
+                            `
+                            }
+                            
+                        }
+                        console.log(item)
+                        $('#list').append(`${item}`)
                         clicked = true
                     }
+
                     else {
                         if ($(this).data().id === x) {
                             $(".schedule").slideToggle("slow");
@@ -442,11 +540,24 @@
                         }
                         else {
                             x = $(this).data().id
-                            const date = new Date(x).toISOString();
+                            const date = new Date(x);
                             $('#list').empty()
                             $(".schedule h1").html(x + ' schedule')
-                            //$('#list').append(`<li>${x}</li>`)
-                            getcourses(date);
+                            let item = "";
+                            for (let i = 0; i < getCourse.length; i++) {
+                                let beginTime = new Date(getCourse[i].beginTime);
+                                let endTime = new Date(getCourse[i].endTime);
+                                if (beginTime.getFullYear() == date.getFullYear() && beginTime.getMonth() == date.getMonth() && beginTime.getDate() == date.getDate()) {
+                                    item += `<li>${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')} 至
+                                                                                    ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')} <br>
+                                                                                                           ${getCourse[i].productName}
+                                                            </li><br>
+                                        `
+                                }
+
+                            }
+                            console.log(item)
+                            $('#list').append(`${item}`)
                             clicked = true;
                         }
                     }
@@ -463,70 +574,28 @@
                 //    console.log(t)
                 //});
 
-        async function getcourses(date) {
-                let response = await fetch(`@Url.Content("~/api/getCourses?id=8")&date=${date}`)
+        async function getcourses() {
+                let response = await fetch(`@Url.Content("~/api/getCourses?id=8")`)
                 console.log(response)
                 
                     let datas = await response.json();
                     const filteredData = datas.filter(data =>
                         data.productId !== null && data.orderStatus !== "取消");
-                    
-                let item = filteredData.map(data => {
-                    const beginTime = new Date(data.beginTime);
-                    const endTime = new Date(data.endTime);
-            return(
-                        `<li>${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')} 至
-                                                            ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')} <br>
-                                                                       ${data.productName}
-                                    </li><br>
-                `
-            )
-            })
-                console.log(item)
-                item = item.join("")
-                $('#list').append(`${item}`)
-            ;
+            return filteredData;
+   
         }
 
             async function schedule(){
 
-                     let response = await fetch(`@Url.Content("~/api/getCourses?id=8")`)
-            console.log(response)
-
+            let response = await fetch(`@Url.Content("~/api/getschedule?id=8")`)
             let datas = await response.json();
+            let item = null;
             const filteredData = datas.filter(data =>
-                data.productId !== null && data.orderStatus !== "取消");
-                return filteredData
-                // if (filteredData.length > 0) {
-                //     $(`#${pick}`).css({
-                //         "color": "white",
-                //         "background-color": "#73BF00",
-                //         "font-family": "Arial",
-                //         "font-size": "20px",
-                //         "padding": "5px"
-                //     });
-                // }
-
-            // let item = filteredData.map(data => {
-            //     const beginTime = new Date(data.beginTime);
-            //     const endTime = new Date(data.endTime);
-            //     return (
-            //         `<li>${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')} 至
-            //                                                             ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')} <br>
-            //                                                                        ${data.productName}
-            //                                     </li><br>
-            //                 `
-            //     )
-            // })
-            // console.log(item)
-            // item = item.join("")
-           
-            // // $('#list').append(`${item}`)
-            //     ;
+                    data.productId !== null && data.orderStatus !== "取消" );
+                    return filteredData
             }
-
-            console.log(schedule())
             
+           
         
         </script>
 
@@ -538,7 +607,7 @@
 
                     let response = await fetch('@Url.Content("~/api/getmyOrderDetail")')
                     let datas = await response.json()
-                    console.log(datas)
+                    // console.log(datas)
 
                     const filteredData = datas.filter(data =>
                         data.productId != null && conditionSatus(data) /* data.orderStatus !== "取消"  */ && conditionTime(data, currentTime)

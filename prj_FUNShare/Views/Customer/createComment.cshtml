@@ -1,0 +1,106 @@
+﻿@model prj_FUNShare.Models.Comment
+
+@{
+    ViewData["Title"] = "createComment";
+}
+
+<h1>createComment</h1>
+
+<h4>Comment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+@*         <form asp-action="createComment" id="comment">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CommentId" class="control-label"></label>
+                <input asp-for="CommentId" class="form-control" />
+                <span asp-validation-for="CommentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label"></label>
+                <input asp-for="ProductId" class="form-control" />
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MemberId" class="control-label"></label>
+                <input asp-for="MemberId" class="form-control" />
+                <span asp-validation-for="MemberId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Review" class="control-label"></label>
+                <input asp-for="Review" class="form-control" />
+                <span asp-validation-for="Review" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rank" class="control-label"></label>
+                <input asp-for="Rank" class="form-control" />
+                <span asp-validation-for="Rank" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" id="button1" />
+            </div>
+        </form> *@
+        <form id="comment">
+
+            @*  <div class="form-group">
+            <label asp-for="CommentId" class="control-label"></label>
+            <input asp-for="CommentId" class="form-control" />
+            <span asp-validation-for="CommentId" class="text-danger"></span>
+            </div> *@
+              <div class="form-group">
+            <label for="UserName" class="form-label">ProductId</label>
+            <input type="number" class="form-control" id="ProductId" name="ProductId">
+
+            </div>
+            <div class="form-group">
+            <label for="UserEmail" class="form-label">MemberId</label>
+            <input type="number" class="form-control" id="MemberId" rows="3" name="MemberId" />
+            </div>
+            <div class="form-group">
+                <label for="UserAge" class="form-label">Review</label>
+                <input type="text" class="form-control" id="Review" rows="3" name="Review"></input>
+            </div>
+            <div class="form-group">
+                <label for="UserAge" class="form-label">Rank</label>
+                <input type="number" class="form-control" id="Rank" rows="3" name="Rank"></input>
+            </div>
+            <div class="form-group">
+                <label for="UserAge" class="form-label">Date</label>
+                <input type="date" class="form-control" id="Date" rows="3" name="Date"></input>
+            </div>
+        </form>
+        <input type="submit" value="送出" class="btn btn-primary" data-mdb-dismiss="comment" id="button1" />
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+          const btn = document.querySelector('#button1')
+            btn.addEventListener('click', event => {
+                event.preventDefault();
+                    const formdata = new FormData(document.querySelector('#comment'));
+            fetch('@Url.Content("~/api/createComment")', {
+                        body: formdata,
+                        method: 'POST'
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                alert("新增成功")
+                                  location.href='@Url.Content("/Customer/asyncmyOrderDetail")'
+                    }
+                    else
+                        alert("新增失敗")
+                })
+        })
+        </script>
+}

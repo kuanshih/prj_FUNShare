@@ -237,22 +237,20 @@ public partial class FUNShareContext : DbContext
 
         modelBuilder.Entity<Comment>(entity =>
         {
-            entity.Property(e => e.CommentId)
-                .ValueGeneratedNever()
-                .HasColumnName("Comment_ID");
+            entity.Property(e => e.CommentId).HasColumnName("Comment_ID");
             entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.MemberId).HasColumnName("Member_ID");
-            entity.Property(e => e.ProductId).HasColumnName("Product_ID");
+            entity.Property(e => e.OrderId).HasColumnName("Order_ID");
 
             entity.HasOne(d => d.Member).WithMany(p => p.Comment)
                 .HasForeignKey(d => d.MemberId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Comment_Customer_Infomation");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.Comment)
-                .HasForeignKey(d => d.ProductId)
+            entity.HasOne(d => d.Order).WithMany(p => p.Comment)
+                .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Comment_Product");
+                .HasConstraintName("FK_Comment_Order");
         });
 
         modelBuilder.Entity<CouponList>(entity =>
