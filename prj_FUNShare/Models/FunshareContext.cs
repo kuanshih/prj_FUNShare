@@ -29,6 +29,8 @@ public partial class FUNShareContext : DbContext
 
     public virtual DbSet<Categories> Categories { get; set; }
 
+    public virtual DbSet<Chat> Chat { get; set; }
+
     public virtual DbSet<City> City { get; set; }
 
     public virtual DbSet<Comment> Comment { get; set; }
@@ -218,6 +220,37 @@ public partial class FUNShareContext : DbContext
                 .IsRequired()
                 .HasMaxLength(30)
                 .HasColumnName("Category_Name");
+        });
+
+        modelBuilder.Entity<Chat>(entity =>
+        {
+            entity.HasKey(e => e.ChatRoomId);
+
+            entity.Property(e => e.ChatRoomId).HasColumnName("ChatRoomID");
+            entity.Property(e => e.ChatMessengerId).HasColumnName("ChatMessengerID");
+            entity.Property(e => e.MessageCreateTime).HasColumnType("datetime");
+            entity.Property(e => e.ReceiverId).HasColumnName("ReceiverID");
+            entity.Property(e => e.SenderId).HasColumnName("SenderID");
+
+            entity.HasOne(d => d.ChatMessenger).WithMany(p => p.ChatChatMessenger)
+                .HasForeignKey(d => d.ChatMessengerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Chat_Customer_Infomation");
+
+            entity.HasOne(d => d.ChatMessengerNavigation).WithMany(p => p.ChatChatMessengerNavigation)
+                .HasForeignKey(d => d.ChatMessengerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Chat_Supplier");
+
+            entity.HasOne(d => d.Receiver).WithMany(p => p.ChatReceiver)
+                .HasForeignKey(d => d.ReceiverId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Chat_Customer_Infomation1");
+
+            entity.HasOne(d => d.ReceiverNavigation).WithMany(p => p.ChatReceiverNavigation)
+                .HasForeignKey(d => d.ReceiverId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Chat_Supplier1");
         });
 
         modelBuilder.Entity<City>(entity =>

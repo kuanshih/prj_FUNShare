@@ -213,40 +213,58 @@
     <div class="modal-dialog modal-lg  modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">留下您的體驗課程評價吧</h5>
                 <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
                 <div class="row">
-                    <div class="col-md-4">
-                        <form id="comment" mothed="post">
+                    <div class="col-md ">
+                        <form id="comment" mothed="post" class="h-100 d-flex flex-column justify-content-center ">
                             
                            @*  <div class="form-group">
                                 <label asp-for="CommentId" class="control-label"></label>
                                 <input asp-for="CommentId" class="form-control" />
                                 <span asp-validation-for="CommentId" class="text-danger"></span>
                             </div> *@
-                            <div class="form-group">
+                            <div class="form-group" hidden>
                                 <label for="UserName" class="form-label">OrderId</label>
-                                <input type="number" class="form-control" id="OrderId" name="OrderId">
-                                
+                                <input type="number" class="form-control" id="OrderId" name="OrderId">  
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" hidden>
                                 <label for="UserEmail" class="form-label">MemberId</label>
                                 <input type="number" class="form-control" id="MemberId" rows="3" name="MemberId" />
                             </div>
                             <div class="form-group">
-                                <label for="UserAge" class="form-label">Review</label>
-                                <input type="text" class="form-control" id="Review" rows="3" name="Review"></input>
+                                <label for="UserAge" class="form-label">您的評價</label>
+                                <input type="text" class="form-control" id="Review" rows="3" name="Review" size= "50"></input>
                             </div>
-                            <div class="form-group">
-                                <label for="UserAge" class="form-label">Rank</label>
-                                <input type="number" class="form-control" id="Rank" rows="3" name="Rank"></input>
+                            <div class="form-group" >
+                                <label for="UserAge" class="form-label">評分</label>
+                                <input type="number" class="form-control" id="Rank" rows="3" name="Rank" hidden></input>
+                                <div id="full-stars-example-two">
+                                    <div class="rating-group">
+                                        <input disabled checked class="rating__input rating__input--none" name="rating3" id="rating3-none" value="0" type="radio">
+                                        <label aria-label="1 star" class="rating__label" for="rating3-1"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                        <input class="rating__input" name="rating3" id="rating3-1" value="1" type="radio">
+                                        <label aria-label="2 stars" class="rating__label" for="rating3-2"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                        <input class="rating__input" name="rating3" id="rating3-2" value="2" type="radio">
+                                        <label aria-label="3 stars" class="rating__label" for="rating3-3"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                        <input class="rating__input" name="rating3" id="rating3-3" value="3" type="radio">
+                                        <label aria-label="4 stars" class="rating__label" for="rating3-4"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                        <input class="rating__input" name="rating3" id="rating3-4" value="4" type="radio">
+                                        <label aria-label="5 stars" class="rating__label" for="rating3-5"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                                        <input class="rating__input" name="rating3" id="rating3-5" value="5" type="radio">
+                                    </div>
+                            @*         <p class="desc" style="font-family: sans-serif; font-size:0.9rem">
+                                        Full stars<br />
+                                        Must select a star value
+                                    </p> *@
+                                </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" hidden>
                                 <label for="UserAge" class="form-label">Date</label>
-                                <input type="date" class="form-control" id="Date" rows="3" name="Date"></input>
+                                <input type="text" class="form-control" id="Date" rows="3" name="Date"></input>
                             </div>
                         </form>
                     </div>
@@ -254,7 +272,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
-                    Close
+                    下次再留
                 </button>
                 <input type="submit" value="送出" class="btn btn-primary" data-mdb-dismiss="comment" id="button1" />
             </div>
@@ -320,6 +338,8 @@
             // status
             let orderPrice = datas[0].count * datas[0].unitPrice
             let bonus = orderPrice/200
+            let time = new Date().toISOString()
+            console.log(time)
             //測試
             document.querySelector("#title").innerHTML = datas[0].productName
             document.querySelector("#div1").innerHTML = datas[0].features
@@ -337,7 +357,9 @@
             document.querySelector("#supplier").innerHTML = `    ${datas[0].supplierName}`
 
             document.querySelector("#location").innerHTML = `<div>${datas[0].cityName}${datas[0].districtName}${datas[0].address}</div>`
-
+            $("#OrderId").val(datas[0].orderId)
+            $("#MemberId").val(datas[0].memberId)
+            $('#Date').val(time)
 
 
             //地圖function
@@ -394,7 +416,7 @@
         orderDetail();
     </script>
       
-    <script>
+    <script>//新增評價
   const btn = document.querySelector('#button1')
         btn.addEventListener('click', event => {
             event.preventDefault();
@@ -406,12 +428,17 @@
                     .then(response => {
                         if (response.ok) {
                             alert("新增成功")
-                              location.href='@Url.Content("/Customer/asyncmyOrderDetail")' 
+                        location.href = '@Url.Content("/Customer/testing")'
                     }
                     else
                         alert("新增失敗")
                 })
         })
+
+        $("#full-stars-example-two input").click(function () {
+            $("#Rank").val($(this).val())
+            
+        });
         </script>
     <script>
         //收合script
@@ -579,6 +606,68 @@
         .location{
             
         }
+
+ /*        星星 */
+
+
+        #full-stars-example-two {
+            /* use display:inline-flex to prevent whitespace issues. alternatively, you can put all the children of .rating-group on a single line */
+            .rating-group
+
+        {
+            display: inline-flex;
+        }
+
+        /* make hover effect work properly in IE */
+        .rating__icon {
+            pointer-events: none;
+        }
+
+        /* hide radio inputs */
+        .rating__input {
+            position: absolute !important;
+            left: -9999px !important;
+        }
+
+        /* hide 'none' input from screenreaders */
+        .rating__input--none {
+            display: none
+        }
+
+        /* set icon padding and size */
+        .rating__label {
+            cursor: pointer;
+            padding: 0 0.1em;
+            font-size: 2rem;
+        }
+
+        /* set default star color */
+        .rating__icon--star {
+            color: orange;
+        }
+
+        /* if any input is checked, make its following siblings grey */
+        .rating__input:checked ~ .rating__label .rating__icon--star {
+            color: #ddd;
+        }
+
+        /* make all stars orange on rating group hover */
+        .rating-group:hover .rating__label .rating__icon--star {
+            color: orange;
+        }
+
+        /* make hovered input's following siblings grey on hover */
+        .rating__input:hover ~ .rating__label .rating__icon--star {
+            color: #ddd;
+        }
+
+        }
+
+
+  /*       body {
+            padding: 1rem;
+            text-align: center;
+        } */
     </style>
 
   

@@ -48,6 +48,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Chat]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[City]",
          "ObjectType": 0
       },

@@ -47,6 +47,10 @@ public partial class CustomerInfomation
 
     public virtual ICollection<Bonus> Bonus { get; set; } = new List<Bonus>();
 
+    public virtual ICollection<Chat> ChatChatMessenger { get; set; } = new List<Chat>();
+
+    public virtual ICollection<Chat> ChatReceiver { get; set; } = new List<Chat>();
+
     public virtual ICollection<Comment> Comment { get; set; } = new List<Comment>();
 
     public virtual District District { get; set; }

@@ -5,6 +5,7 @@ namespace prj_FUNShare.ViewModels
     public class COrderItmeVIewModel
     {
         public int? ProductId { get; set; }
+        public int? MemberId { get; set; }
         public string ProductName { get; set; }
         public string? Features { get; set; }
         //public string? AgeGrade { get; set; }

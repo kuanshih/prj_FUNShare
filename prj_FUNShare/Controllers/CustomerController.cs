@@ -129,5 +129,10 @@ namespace prj_FUNShare.Controllers
         {
             return View();
         }
+        public IActionResult chatbox() {
+            {
+                return View();
+            } 
+        }
     }
 }

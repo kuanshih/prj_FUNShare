@@ -102,6 +102,7 @@ namespace prj_FUNShare.Controllers
         .Select(order => new COrderItmeVIewModel
         {
             //ProductId = 8,
+            MemberId = memberId,
             orderId = order.OrderId,
             ProductId = order.OrderDetail.First().ProductDetail.ProductId,
             ProductName = order.OrderDetail.First().ProductDetail.Product.ProductName,
