@@ -19,6 +19,8 @@ public partial class Comment
 
     public DateTime? Date { get; set; }
 
+    public string ImagePath { get; set; }
+
     public virtual CustomerInfomation Member { get; set; }
 
     public virtual Order Order { get; set; }

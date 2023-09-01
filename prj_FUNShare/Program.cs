@@ -1,15 +1,19 @@
+
 using Microsoft.EntityFrameworkCore;
+using prj_FUNShare.Hubs;
 using prj_FUNShare.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddSignalR();
 builder.Services.AddDbContext<FUNShareContext>(
     option => option.UseSqlServer(builder.Configuration.GetConnectionString("FUNShareConnection")));
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -29,5 +33,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<ChatHub2>("/chatHub");
 
 app.Run();

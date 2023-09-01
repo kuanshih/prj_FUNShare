@@ -17,6 +17,10 @@ namespace prj_FUNShare.Controllers
         {
             return View();
         }
+        public IActionResult chat()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {

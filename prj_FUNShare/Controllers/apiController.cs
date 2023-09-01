@@ -10,11 +10,13 @@ namespace prj_FUNShare.Controllers
     public class apiController : Controller
     {
         private readonly FUNShareContext _context;
+        private readonly IWebHostEnvironment _host;
         private readonly int _id;
-        public apiController(FUNShareContext context, int memberId = 8)
+        public apiController(FUNShareContext context, IWebHostEnvironment host, int memberId = 8)
         {
             _context = context;
             _id = memberId;
+            _host = host;
         }
 
         public IActionResult Index()
@@ -208,8 +210,17 @@ namespace prj_FUNShare.Controllers
             return Json(datas);
         }
 
-        public IActionResult createComment(Comment comment)
+        public IActionResult createComment(Comment comment, IFormFile file)
         {
+            
+            //存入實體路徑
+            string photoName = Guid.NewGuid().ToString() + ".jpg";  //產生不重複檔名
+            string filepath = Path.Combine(_host.WebRootPath, "img/commentImg", photoName);
+            using (var filestream = new FileStream(filepath, FileMode.Create))
+            {
+                file.CopyTo(filestream);
+            }
+            comment.ImagePath = photoName;
             _context.Comment.Add(comment);
             _context.SaveChanges();
             return Content("新增成功");

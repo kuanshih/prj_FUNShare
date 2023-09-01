@@ -1,4 +1,6 @@
+
 using prjSignalR.Hubs;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
-app.MapHub<ChatHub>("/chatHub");
+app.MapHub<ChatHub2>("/chatHub");
 
 app.Run();

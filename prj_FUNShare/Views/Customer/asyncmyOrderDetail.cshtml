@@ -214,7 +214,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">留下您的體驗課程評價吧</h5>
-                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
@@ -238,6 +238,11 @@
                             <div class="form-group">
                                 <label for="UserAge" class="form-label">您的評價</label>
                                 <input type="text" class="form-control" id="Review" rows="3" name="Review" size= "50"></input>
+                            </div>
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">照片</label>
+                                <input class="form-control" type="file" id="formFile" name="file">
+                                <img id="preview" class="img-thumbnail w-25" style="display:none;" />
                             </div>
                             <div class="form-group" >
                                 <label for="UserAge" class="form-label">評分</label>
@@ -328,7 +333,7 @@
             else if (datas[0].orderStatus === "已付款" && datas[0].orderDetailStatus === "報名成功" && datas[0].isAttend) {
                 document.querySelector("#status").innerHTML = datas[0].orderStatus + datas[0].orderDetailStatus + datas[0].isAttend
                 document.querySelector("#review").innerHTML = `         <h2>體驗回饋</h2>
-                                                    <button data-mdb-toggle="modal" data-mdb-target="#CommentModal">留下您寶貴的意見:</button>
+                                                    <button data-mdb-toggle="modal" class="btn btn-secondary" data-mdb-target="#CommentModal">留下您寶貴的意見:</button>
                             `
             }
             //報名成功有參加已留言
@@ -434,6 +439,22 @@
                         alert("新增失敗")
                 })
         })
+
+        //照片預覽功能
+        $("#formFile").change(function () {
+            $("#preview").show()
+            readURL(this);
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#preview").attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
         $("#full-stars-example-two input").click(function () {
             $("#Rank").val($(this).val())
@@ -668,6 +689,8 @@
             padding: 1rem;
             text-align: center;
         } */
+
+    
     </style>
 
   

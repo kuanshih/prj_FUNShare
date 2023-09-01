@@ -134,5 +134,11 @@ namespace prj_FUNShare.Controllers
                 return View();
             } 
         }
+        public IActionResult google_calendar()
+        {
+            {
+                return View();
+            }
+        }
     }
 }
