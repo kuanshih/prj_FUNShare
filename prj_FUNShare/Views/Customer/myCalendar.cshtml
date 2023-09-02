@@ -12,8 +12,8 @@
         <div class="currentCourse" id="currentCourse">
             <div hidden><span class="dot"></span>  寶可夢體驗</div>
                 </div>
-        <div class="currentCourse">
-            Group
+        <div class="currentCourse" id="orderDetail">
+            
         </div>
         <div class="list">
         </div>
@@ -55,7 +55,25 @@
     </div> *@
 </div>
 
-
+@*詳細課程資訊*@
+<!-- Modal -->
+<div class="modal top fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" data-mdb-backdrop="false" aria-hidden="true" data-mdb-keyboard="true">
+    <div class="modal-dialog  ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="title">Modal title</h5>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">...</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts{
@@ -184,7 +202,9 @@
                     if (beginTime.getFullYear() == pickNew.getFullYear() && beginTime.getMonth() == pickNew.getMonth() && beginTime.getDate() == pickNew.getDate()) {
                         console.log(beginTime.getFullYear())
 
-                            items += `<br><span><span class="dot"></span>   ${getData[i].productName}`;
+                            items += `
+
+                                        <br><span onclick="showModal()" data-bs-toggle="modal"><span class="dot"></span>   ${getData[i].productName}`;
                         t = 1;
                         // break
                     }
@@ -356,9 +376,26 @@
     }
 
     //點選任何一個事情
-    function seeDetail(int orderid){
-
+    async function seeDetail(orderid){
+            const value = await getcourses();
+            const getCourse = value;
+            
+            const filterData = getCourse.filter(data => data.orderId == orderid);
+            let beginTime = new Date(filterData[0].beginTime);
+            let endTime = new Date(filterData[0].endTime);
+            $("#orderDetail").empty();
+            $("#orderDetail").append(`<h5>${filterData[0].productName}</h5><br><span>${(beginTime.getMonth() + 1).toString().padStart(2, '0')
+                } /${beginTime.getDate().toString().padStart(2, '0')}       ${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')} -
+                                                                                                    ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}</span> <br>`)
     }
+
+
+        function showModal() {
+            
+
+            var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+            myModal.show();
+        }
 
 </script>
 }
@@ -461,7 +498,14 @@
                 
                     display: inline-block;
                     font-size: 0.8rem;
+                   /* background-color:white;*/
+                /*    border-radius:30px;*/
             }  
+                .days div span:hover {
+                    background-color: #FFF8D7;
+                    border: 0.2rem solid #777;
+                    cursor: pointer;
+                }
 
 
                 .days div:hover:not(.today) {
