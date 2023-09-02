@@ -182,6 +182,7 @@ namespace prj_FUNShare.Controllers
                             //ProductId = 8,
                             orderId = order.OrderId,
                             ProductName = order.OrderDetail.First().ProductDetail.Product.ProductName,
+                            Feature = order.OrderDetail.First().ProductDetail.Product.Features,
                             beginTime = order.OrderDetail.First().ProductDetail.BeginTime,
                             endTime = order.OrderDetail.First().ProductDetail.EndTime,
                             OrderStatus = order.Status.Description,
