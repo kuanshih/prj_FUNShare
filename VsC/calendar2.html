@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>calendar</title>
+    <link href="calendar2.css" rel="stylesheet" />
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+</head>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container d-flex">
+    <div class="calendar">
+        <div class="month">
+            <i class="fas fa-angle-left prev"></i>
+            <div class="date">
+                <h1></h1>
+                <p>Fri May 29,2020</p>
+            </div>
+            <i class="fas fa-angle-right next"></i>
+        </div>
+        <div class="weekdays">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+        </div>
+        <div class="days">
+        </div>
+    </div>
+    <div class="schedule panelSch">
+        <div class="title">
+            <div class="pickday">
+                <h1></h1>
+            </div>
+        </div>
+        <div class="list" id="list">
+@*                    <div class="time">
+                <div>6am</div>
+                <div>8am</div>
+                <div>10am</div>
+                <div>12pm</div>
+                <div>14pm</div>
+                <div>16pm</div>
+                <div>18pm</div>
+                <div>20pm</div>
+                <div>22pm</div>
+            </div>*@
+        </div>
+    </div>
+</div>
+<script src="calendar.js"></script>
+</body>
