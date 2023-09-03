@@ -145,5 +145,10 @@ namespace prj_FUNShare.Controllers
                 return View();
             }
         }
+
+        public IActionResult orderPage()
+        {
+            return View();
+        }
     }
 }

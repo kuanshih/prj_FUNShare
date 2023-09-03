@@ -61,17 +61,14 @@
     <div class="modal-dialog  ">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="title">Modal title</h5>
+                <h5 class="modal-title" id="title" style="font-weight:400; font-family:Arial">Modal title</h5>
                 <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
             </div>
             <div id = "detailBody"class="modal-body">
           
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
-                    進入課程明細
-                </button>
-                <button type="button" class="btn btn-primary">評論</button>
+            <div class="modal-footer" id="detailFooter">
+
             </div>
         </div>
     </div>
@@ -400,14 +397,23 @@
             let beginTime = new Date(filterData[0].beginTime);
             let endTime = new Date(filterData[0].endTime);
             $("#title").html(filterData[0].productName)
-            $("#detailBody").html(`      <div>日期: ${(beginTime.getMonth() + 1).toString().padStart(2, '0')
+            $("#detailBody").html(`      <div><i class="fa-solid fa-calendar-days"></i> 日期: ${(beginTime.getMonth() + 1).toString().padStart(2, '0')
                 } /${beginTime.getDate().toString().padStart(2, '0')}       ${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')} -
-                                                                                                            ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}</div>
-                        <div>描述: ${filterData[0].feature}</div>
-                        <div>參加人:</div>`)
-            //$("#")
+                                                                                                                    ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}</div><br/>
+                                <div><i class="fa-solid fa-arrow-right"></i>    描述: ${filterData[0].feature}</div><br/>
+                                                <div><i class="fa-solid fa-location-dot"></i>   位置: ${filterData[0].location}</div><br/>
+                                <div><i class="fa-solid fa-person"></i> 參加人:</div>`)
+            $("#detailFooter").empty();
+            $("#detailFooter").append(`                <button type="button" class="btn btn-secondary" onclick="showOrderDetail(${filterData[0].orderId})">
+                            進入課程明細
+                        </button>
+                        <button type="button" class="btn btn-primary">評論</button>`)
             var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
             myModal.show();
+        }
+
+        function showOrderDetail(orderId) {
+            window.location.href = `@Url.Content("~/Customer/asyncmyOrderDetail?orderId=")` + orderId;
         }
 
 </script>

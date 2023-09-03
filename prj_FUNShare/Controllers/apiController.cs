@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using prj_FUNShare.Models;
 using prj_FUNShare.ViewModels;
 using prjFunShare_Core.ViewModels;
+using System.Text.Json;
 
 namespace prj_FUNShare.Controllers
 {
@@ -27,7 +28,17 @@ namespace prj_FUNShare.Controllers
         public IActionResult PocketCardItem()
         {
 
-            int id = 8; //todo 先寫死
+            //int id = 8; //todo 先寫死
+
+            int id = 0;
+            // 判斷是否登入
+            //if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            //{
+            //    string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            //    CustomerInfomation customer = JsonSerializer.Deserialize<CustomerInfomation>(json);
+            //    id = customer.MemberId;
+            //}
+
             //----------------------------------------------------登入//
 
             //----------------------------------------------------登入//
@@ -182,10 +193,11 @@ namespace prj_FUNShare.Controllers
                             //ProductId = 8,
                             orderId = order.OrderId,
                             ProductName = order.OrderDetail.First().ProductDetail.Product.ProductName,
-                            Feature = order.OrderDetail.First().ProductDetail.Product.Features,
+                            Feature = string.IsNullOrEmpty(order.OrderDetail.First().ProductDetail.Product.Features) ? order.OrderDetail.First().ProductDetail.Product.ProductIntro : order.OrderDetail.First().ProductDetail.Product.Features,
                             beginTime = order.OrderDetail.First().ProductDetail.BeginTime,
                             endTime = order.OrderDetail.First().ProductDetail.EndTime,
                             OrderStatus = order.Status.Description,
+                            location = order.OrderDetail.First().ProductDetail.District.City.CityName + order.OrderDetail.First().ProductDetail.District.DistrictName+ order.OrderDetail.FirstOrDefault().ProductDetail.Address,
                         };
             return Json(datas);
         }

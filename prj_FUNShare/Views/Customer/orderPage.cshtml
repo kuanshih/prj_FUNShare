@@ -1,0 +1,234 @@
+﻿<h1>我的課程體驗</h1><br />
+
+
+<div class="container">
+<h3>正在進行的課程與體驗</h3>
+    <div class="row" id="cardFuture">
+        <span id="currentTime" style="display: none;"></span>
+@*     <div class="col-md-8" >
+    </div>
+        <div class="col-md-4 d-flex flex-column justify-content-between align-items-start">
+            <button class="btn btn-primary" style="margin:5px;">測試</button>
+            <button class="btn btn-primary" style="margin:5px;">測試</button>
+            <button class="btn btn-primary" style="margin:5px;">測試</button>
+    </div> *@
+</div>
+<h3>完成的課程與體驗</h3>
+
+    <div class="row" id="cardPast">
+        <div class="col-md-4 h-100 d-flex">
+            <div class="col-4"><img src="~/img/product/a533b9d5-5a4b-45b6-b944-a74d293385ef.jpg" class="smallImg"/></div>
+            <div class="col-8 h-100 d-flex flex-column">
+                <span class="name">寶可鳳體驗營</span>
+                <span>星期一 2023.09.03  15:00-17:00</span>
+                <span>台北市大安區信義路三段</span>
+            </div>
+        </div>
+        
+    </div>
+
+<h3>取消的課程與體驗</h3>
+
+    <div class="row">
+     
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+
+        const currentTimeElement = document.querySelector('#currentTime');
+
+        //未來的課程與體驗
+        async function orderCard(tbody, conditionSatus, conditionTime) {
+
+            try {
+                const currentTime = new Date(currentTimeElement.textContent); // Get current time from the stored element's content
+
+                let response = await fetch('@Url.Content("~/api/getmyOrderDetail")')
+                let datas = await response.json()
+                // console.log(datas)
+
+                const filteredData = datas.filter(data =>
+                    data.productId != null && conditionSatus(data) /* data.orderStatus !== "取消"  */ && conditionTime(data, currentTime)
+                );
+                const item = filteredData.map(data => {
+                    //時間格式化
+                    const beginTime = new Date(data.beginTime);
+                    const endTime = new Date(data.endTime);
+                    //價格格式化
+                    const unitPrice = data.unitPrice;
+                    const formattedUnitPrice = new Intl.NumberFormat('zh-TW', {
+                        style: 'currency',
+                        currency: 'TWD',
+                        currencyDisplay: 'symbol',
+                        maximumFractionDigits: 0
+                    }).format(unitPrice);
+                    return (
+                        `            <div class="col-md-8" ><div class="card mb-3" style="max-width: 800px; max-height:200px">
+                        <div class="row g-0">
+                            <div class="col-md-6">
+                                <div class="card-body wide:auto">
+                                            <h5 class="card-title">${data.productName}</h5>
+                                            <p class="card-text">${data.supplierName}</p><hr />
+                                            <p class="card-text ellipsis2">
+                                        ${data.features}
+                                    </p>
+                                    <p class="card-text">
+                                        <small class="text-muted">Last updated 3 mins ago</small>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                        <img src="@Url.Content("~/img/product/")${data.imagePath}" class="img-fluid rounded-start cardImg" />
+                            </div>
+                        </div>
+                            </div> </div>
+                <div class="col-md-4 d-flex flex-column justify-content-start align-items-start">
+                    <button class="btn btn-primary" style="margin:5px;">測試</button>
+                    <button class="btn btn-primary" style="margin:5px;">測試</button>
+                    <button class="btn btn-primary" style="margin:5px;">測試</button>
+            </div>`
+                    )
+
+                })
+                tbody.innerHTML = item.join("");
+
+            }
+            catch (error) {
+                alert("An error occurred:", error)
+            }
+        }
+        async function orderFutureCard() {
+            await orderCard(cardFuture, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) >= currentTime);
+        }
+
+        (async () => {
+            const currentTime = await getCurrentServerTime();
+            currentTimeElement.textContent = currentTime.toISOString();
+            await orderFutureCard();
+
+        })();
+        //過去的課程與體驗
+        async function orderCard(tbody, conditionSatus, conditionTime) {
+
+            try {
+                const currentTime = new Date(currentTimeElement.textContent); // Get current time from the stored element's content
+
+                let response = await fetch('@Url.Content("~/api/getmyOrderDetail")')
+                let datas = await response.json()
+                // console.log(datas)
+
+                const filteredData = datas.filter(data =>
+                    data.productId != null && conditionSatus(data) /* data.orderStatus !== "取消"  */ && conditionTime(data, currentTime)
+                );
+                const item = filteredData.map(data => {
+                    //時間格式化
+                    const beginTime = new Date(data.beginTime);
+                    const endTime = new Date(data.endTime);
+                    //價格格式化
+                    const unitPrice = data.unitPrice;
+                    const formattedUnitPrice = new Intl.NumberFormat('zh-TW', {
+                        style: 'currency',
+                        currency: 'TWD',
+                        currencyDisplay: 'symbol',
+                        maximumFractionDigits: 0
+                    }).format(unitPrice);
+                    return (
+                        `   <div class="col-md-4 h-100 d-flex">
+                    <div class="col-4"><img src="~/img/product/a533b9d5-5a4b-45b6-b944-a74d293385ef.jpg" class="smallImg" /></div>
+                    <div class="col-8 h-100 d-flex flex-column">
+                        <span class="name">寶可鳳體驗營</span>
+                        <span>星期一 2023.09.03  15:00-17:00</span>
+                        <span>台北市大安區信義路三段</span>
+                    </div>
+                </div>`
+                    )
+
+                })
+                tbody.innerHTML = item.join("");
+
+            }
+            catch (error) {
+                alert("An error occurred:", error)
+            }
+        }
+        async function orderPastCard() {
+            await orderCard(cardPast, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) < currentTime);
+        }
+
+        (async () => {
+            const currentTime = await getCurrentServerTime();
+            currentTimeElement.textContent = currentTime.toISOString();
+            await orderFutureCard();
+
+        })();
+
+        //現在時間api
+        async function getCurrentServerTime() {
+            try {
+                let response = await fetch('@Url.Content("~/api/now")'); // Replace with the actual API endpoint URL
+                let data = await response.json();
+                return new Date(data.currentTime); // Convert the received time to a JavaScript Date object
+            } catch (error) {
+                console.error("An error occurred:", error);
+                return null;
+            }
+        }
+    </script>
+}
+
+@section Styles{
+    <style>
+        h3{
+            margin-top:30px;
+            margin-bottom:30px;
+            font-wiight:bolder;
+        }
+        .col-md-4 {
+/*             background-color:lightgray;
+            border:solid; */
+            
+        }
+        hr{
+            margin-top:5px;
+            margin-bottom:5px;
+        }
+        .card{
+            border-radius:30px;
+       /*      margin-bottom:40px; */
+        }
+
+        .mb-3 {
+            margin-bottom: 3rem !important;
+        }
+        .ellipsis2{
+            overflow: hidden;
+            display: -webkit-box;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 2; /*行數*/
+            -webkit-box-orient: vertical;
+            white-space: normal;
+        }
+        .cardImg{
+            border-radius:15px;
+            width:100%;
+            height:auto;
+        }
+        .smallImg{
+            width:100px;
+            height:100px;
+            background-size: contain;
+            background-size: cover;
+            border-radius:10px;
+        }
+        .name{
+     
+            font-weight:bolder;
+        }
+        .card-text{
+            margin-bottom:5px;
+        }
+    </style>
+}
