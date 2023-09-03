@@ -16,20 +16,13 @@
 <h3>完成的課程與體驗</h3>
 
     <div class="row" id="cardPast">
-        <div class="col-md-4 h-100 d-flex">
-            <div class="col-4"><img src="~/img/product/a533b9d5-5a4b-45b6-b944-a74d293385ef.jpg" class="smallImg"/></div>
-            <div class="col-8 h-100 d-flex flex-column">
-                <span class="name">寶可鳳體驗營</span>
-                <span>星期一 2023.09.03  15:00-17:00</span>
-                <span>台北市大安區信義路三段</span>
-            </div>
-        </div>
+   
         
     </div>
 
 <h3>取消的課程與體驗</h3>
 
-    <div class="row">
+    <div class="row" id="cardCancel">
      
     </div>
 </div>
@@ -66,9 +59,9 @@
                         maximumFractionDigits: 0
                     }).format(unitPrice);
                     return (
-                        `            <div class="col-md-8" ><div class="card mb-3" style="max-width: 800px; max-height:200px">
-                        <div class="row g-0">
-                            <div class="col-md-6">
+                        `            <div class="col-md-8" ><div class="card mb-3" onclick="showOrderDetail(${data.orderId})" style="max-width: 800px; max-height:200px" >
+                        <div class="row g-0" >
+                            <div class="col-md-6" >
                                 <div class="card-body wide:auto">
                                             <h5 class="card-title">${data.productName}</h5>
                                             <p class="card-text">${data.supplierName}</p><hr />
@@ -111,7 +104,7 @@
 
         })();
         //過去的課程與體驗
-        async function orderCard(tbody, conditionSatus, conditionTime) {
+        async function orderCard2(tbody, conditionSatus, conditionTime) {
 
             try {
                 const currentTime = new Date(currentTimeElement.textContent); // Get current time from the stored element's content
@@ -136,12 +129,12 @@
                         maximumFractionDigits: 0
                     }).format(unitPrice);
                     return (
-                        `   <div class="col-md-4 h-100 d-flex">
-                    <div class="col-4"><img src="~/img/product/a533b9d5-5a4b-45b6-b944-a74d293385ef.jpg" class="smallImg" /></div>
-                    <div class="col-8 h-100 d-flex flex-column">
-                        <span class="name">寶可鳳體驗營</span>
-                        <span>星期一 2023.09.03  15:00-17:00</span>
-                        <span>台北市大安區信義路三段</span>
+                        `   <div class="col-md-4 h-100 d-flex smallCard" onclick="showOrderDetail(${data.orderId})">
+                            <div class="col-4"><img src="@Url.Content("~/img/product/")${data.imagePath}" class="smallImg" /></div>
+                            <div class="col-8 h-100 d-flex flex-column">
+                                <span class="name">${data.productName}</span>
+                                        <span>${beginTime.getFullYear()} -${(beginTime.getMonth() + 1).toString().padStart(2, '0')} -${beginTime.getDate().toString().padStart(2, '0')} ${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')}-${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}</span>
+                        <span>${data.cityName}${data.districtName}${data.address}</span>
                     </div>
                 </div>`
                     )
@@ -155,14 +148,17 @@
             }
         }
         async function orderPastCard() {
-            await orderCard(cardPast, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) < currentTime);
+            await orderCard2(cardPast, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) < currentTime);
+        }
+        async function orderCancelCard() {
+            await orderCard2(cardCancel, data => data.orderStatus === "取消", (data, currentTime) => new Date(data.beginTime) < currentTime || new Date(data.beginTime) >= currentTime);
         }
 
         (async () => {
             const currentTime = await getCurrentServerTime();
             currentTimeElement.textContent = currentTime.toISOString();
-            await orderFutureCard();
-
+            await orderPastCard();
+            await orderCancelCard();
         })();
 
         //現在時間api
@@ -175,6 +171,11 @@
                 console.error("An error occurred:", error);
                 return null;
             }
+        }
+
+        //進入訂單明細頁
+        function showOrderDetail(orderId) {
+            window.location.href = `@Url.Content("~/Customer/asyncmyOrderDetail?orderId=")` + orderId;
         }
     </script>
 }
@@ -215,6 +216,10 @@
             border-radius:15px;
             width:100%;
             height:auto;
+        }
+
+        .smallCard{
+            margin-bottom:40px;
         }
         .smallImg{
             width:100px;
