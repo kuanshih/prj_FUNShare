@@ -1,385 +1,755 @@
-@{
-  ViewData["Title"] = "asyncmyOrderDetail";
-}
+@* <body>
+    <!-- Tabs navs -->
+    <ul class="nav nav-tabs nav-justified mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active"
+               id="ex3-tab-1"
+               data-mdb-toggle="tab"
+               href="#ex3-tabs-1"
+               role="tab"
+               aria-controls="ex3-tabs-1"
+               aria-selected="true">我的課程</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="ex3-tab-2"
+               data-mdb-toggle="tab"
+               href="#ex3-tabs-2"
+               role="tab"
+               aria-controls="ex3-tabs-2"
+               aria-selected="false">我的課表</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="ex3-tab-3"
+               data-mdb-toggle="tab"
+               href="#ex3-tabs-3"
+               role="tab"
+               aria-controls="ex3-tabs-3"
+               aria-selected="false">體驗課程列表</a>
+        </li>
+    </ul>
+    <!-- Tabs navs -->
+    <!-- Tabs content -->
+    <div class="tab-content" id="ex2-content">
+        <div class="tab-pane fade show active"
+             id="ex3-tabs-1"
+             role="tabpanel"
+             aria-labelledby="ex3-tab-1">
+            <div class="container ">
+                <h2>我的體驗課程</h2>
+                <div class="row">
+                    <div class="row row-cols-1 row-cols-md-2 g-4" id="courseCurrent">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade"
+             id="ex3-tabs-2"
+             role="tabpanel"
+             aria-labelledby="ex3-tab-2">
+            <h1 class="d-flex justify-content-center align-items-center">我的課表</h1>
+            <div class="container d-flex">
+                
+                <div class="calendar">
+                    <div class="month">
+                        <i class="fas fa-angle-left prev"></i>
+                        <div class="date">
+                            <h1></h1>
+                            <p>Fri May 29,2020</p>
+                        </div>
+                        <i class="fas fa-angle-right next"></i>
+                    </div>
+                    <div class="weekdays">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+                    <div class="days">
+                    </div>
+                </div>
+                <div class="schedule panelSch">
+                    <div class="title">
+                        <div class="pickday">
+                            <h1></h1>
+                        </div>
+                    </div>
+                    <div class="list" id="list">
+                        @*                    <div class="time">
+                        <div>6am</div>
+                        <div>8am</div>
+                        <div>10am</div>
+                        <div>12pm</div>
+                        <div>14pm</div>
+                        <div>16pm</div>
+                        <div>18pm</div>
+                        <div>20pm</div>
+                        <div>22pm</div>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade"
+             id="ex3-tabs-3"
+             role="tabpanel"
+             aria-labelledby="ex3-tab-3">
+            <div id="ex-with-icons-content">
+                <span id="currentTime" style="display: none;"></span>
+                <h3>未來的體驗活動</h3>
+                <table class="table table-hover table-striped  ">
+                    <thead class="justify-content-center align-items-center ">
+                        <tr>
+                            <th>
+                                產品名稱
+                            </th>
+                            <th>
+                                提供廠商
+                            </th>
+                            <th>
+                                體驗時間
+                            </th>
+                            <th>
+                                單價
+                            </th>
+                            <th>
+                                報名狀況
+                            </th>
+                            <th>
+                                繳費狀況
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="futuretbody">
+                    </tbody>
+                </table>
+                <h3>過去的體驗活動</h3>
+                <table class="table table-hover table-striped  ">
+                    <thead class="justify-content-center align-items-center ">
+                        <tr>
+                            <th>
+                                產品名稱
+                            </th>
+                            <th>
+                                提供廠商
+                            </th>
+                            <th>
+                                體驗時間
+                            </th>
+                            <th>
+                                單價
+                            </th>
+                            <th>
+                                報名狀況
+                            </th>
+                            <th>
+                                繳費狀況
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="pasttbody">
+                    </tbody>
+                </table>
+                <h3>取消的體驗活動</h3>
+                <table class="table table-hover table-striped  ">
+                    <thead class="justify-content-center align-items-center ">
+                        <tr>
+                            <th>
+                                產品名稱
+                            </th>
+                            <th>
+                                提供廠商
+                            </th>
+                            <th>
+                                體驗時間
+                            </th>
+                            <th>
+                                單價
+                            </th>
+                            <th>
+                                報名狀況
+                            </th>
+                            <th>
+                                繳費狀況
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="canceledtbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Tabs content -->
+    @section Scripts{
+        <script>
+
+            const currentTimeElement = document.querySelector('#currentTime');
+            const futuretbody = document.querySelector('#futuretbody');
+            const pasttbody = document.querySelector('#pasttbody');
+            const canceledtbody = document.querySelector('#canceledtbody');
+            const apiUrl = {
+                getCurrentServerTime: '@Url.Content("~/api/now")',
+                getMyOrderDetail: '@Url.Content("~/api/getmyOrderDetail")'
+            };
 
 
-<div id="orderDetailContent">
-  <!-- Carousel wrapper -->
-  <div id="carouselBasicExample" class="carousel slide carousel-fade" data-mdb-ride="carousel">
-      <!-- Indicators -->
-      <div class="carousel-indicators">
-          <button type="button"
-                  data-mdb-target="#carouselBasicExample"
-                  data-mdb-slide-to="0"
-                  class="active"
-                  aria-current="true"
-                  aria-label="Slide 1"></button>
-          <button type="button"
-                  data-mdb-target="#carouselBasicExample"
-                  data-mdb-slide-to="1"
-                  aria-label="Slide 2"></button>
-          <button type="button"
-                  data-mdb-target="#carouselBasicExample"
-                  data-mdb-slide-to="2"
-                  aria-label="Slide 3"></button>
-      </div>
+            //現在時間api
+            async function getCurrentServerTime() {
+                try {
+                    let response = await fetch('@Url.Content("~/api/now")'); // Replace with the actual API endpoint URL
+                    let data = await response.json();
+                    return new Date(data.currentTime); // Convert the received time to a JavaScript Date object
+                } catch (error) {
+                    console.error("An error occurred:", error);
+                    return null;
+                }
+            }
 
-      <!-- Inner -->
-      <div class="carousel-inner">
-          <!-- Single item -->
-          <div id="img1" class="carousel-item active">
+            //共用table function
+            async function orderTable(tbody, conditionSatus, conditionTime) {
 
-              @*                 <div class="carousel-caption d-none d-md-block">
-              <h5>First slide label</h5>
-              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-              </div> *@
-          </div>
+                try {
+                    const currentTime = new Date(currentTimeElement.textContent); // Get current time from the stored element's content
 
-          <!-- Single item -->
-          <div class="carousel-item">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(22).webp" class="d-block w-100" alt="Canyon at Nigh" />
-              <div class="carousel-caption d-none d-md-block">
-                  <h5>Second slide label</h5>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-              </div>
-          </div>
+                    let response = await fetch('@Url.Content("~/api/getmyOrderDetail")')
+                    let datas = await response.json()
+                    console.log(datas)
 
-          <!-- Single item -->
-          <div class="carousel-item">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(23).webp" class="d-block w-100" alt="Cliff Above a Stormy Sea" />
-              <div class="carousel-caption d-none d-md-block">
-                  <h5>Third slide label</h5>
-                  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-              </div>
-          </div>
-      </div>
-      <!-- Inner -->
-      <!-- Controls -->
-      <button class="carousel-control-prev" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-      </button>
-  </div>
-  <!-- Carousel wrapper -->
-  <br />
-  <div class="container">
-      <h1 id="title" class="h-100 d-flex justify-content-center align-items-center"></h1>
-      <!-- Stepper -->
-      <div class="wrapper option-1 option-1-1">
-          <ol class="c-stepper">
-              <li class="c-stepper__item">
-                  <h3 class="c-stepper__title">報名付款</h3>
-                  <p class="c-stepper__desc">報名狀態</p>
-              </li>
-              <li class="c-stepper__item">
-                  <h3 class="c-stepper__title">報到參與體驗</h3>
-                  <p class="c-stepper__desc">產生QRcode</p>
-              </li>
-              <li class="c-stepper__item">
-                  <h3 class="c-stepper__title">回饋</h3>
-                  <p class="c-stepper__desc">留言</p>
-              </li>
-          </ol>
-      </div>
-      <!-- Stepper -->
-      <br>
-      <nav>
-          <ul class="menu d-flex justify-content-between">
-              <li><a href="#about">課程介紹</a></li>
-              <li><a href="#order">訂單資訊</a></li>
-              <li><a href="#cancel">取消更改政策</a></li>
-              <li><a href="#location">位置</a></li>
-          </ul>
-      </nav>
-  </div>
-  <div class="container space1">
-      <div class="d-flex align-items-start  bg-light  row mb-3">
-          <!--左側-->
-          <div class="col-8">
-              <h2 id="about">簡介</h2>
-              <div id="div1"></div>
-              <br>
-              <div class="flip"><span class="1"><h2 class="fa-solid fa-caret-down" id="cancel">取消與更改</h2></span></div>
-              <div class="panel">
-                  <br>
-                  <h5 style="font-size:20px">取消辦法</h5>
-                  <ul>
+                    const filteredData = datas.filter(data =>
+                        data.productId != null && conditionSatus(data) /* data.orderStatus !== "取消"  */ && conditionTime(data, currentTime)
+                    );
+                    const item = filteredData.map(data => {
+                        //時間格式化
+                        const beginTime = new Date(data.beginTime);
+                        const endTime = new Date(data.endTime);
+                        //價格格式化
+                        const unitPrice = data.unitPrice;
+                        const formattedUnitPrice = new Intl.NumberFormat('zh-TW', {
+                            style: 'currency',
+                            currency: 'TWD',
+                            currencyDisplay: 'symbol',
+                            maximumFractionDigits: 0
+                        }).format(unitPrice);
+                        return (
 
+                            `
+                                     <tr onclick="showOrderDetail('${data.orderId}')">
+                                                <th>
+                                                        ${data.productName}
+                                                        <p>
+                                                                <img src="@Url.Content("~/img/product/")${data.imagePath}" width="250" height="160" class="img-thumbnail" />
+                                                        </p>
+                                                </th>
+                                                <th>
+                                                        ${data.supplierName}
+                                                </th>
+                                                <th>
+                                                                       ${beginTime.getFullYear()} -${(beginTime.getMonth() + 1).toString().padStart(2, '0')} -${beginTime.getDate().toString().padStart(2, '0')} ${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')}
+                                                                       <br>
+                                                                               <br>
+                                                                                       <p class="d-flex justify-content-center align-items-center">至</p>
+                                                                                               <br>
+                                                                         ${endTime.getFullYear()} -${(endTime.getMonth() + 1).toString().padStart(2, '0')} -${endTime.getDate().toString().padStart(2, '0')} ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}
+                                                </th>
+                                                <th>
+                                                                 ${formattedUnitPrice} 元
+                                                </th>
+                                                <th>
+                                                         ${data.orderDetailStatus}
+                                                </th>
+                                                <th>
+                                                        ${data.orderStatus}
+                                                </th>
+                                            </tr>
+                                        `
+                        )
 
-                      <li>出發日前 7 日前（不含出發日）通知取消，可全額退費。</li>
-                      <li>出發日前 6 日至前 4 日內（不含出發日）通知取消，收取手續費 50％。</li>
-                      <li>出發日前 3 日（不含出發日）至當日內不接受取消，並不予退回款項。</li>
-                      <li>於活動中如因非可究責主辦單位之因素中止參與活動，將不予退回款項。</li>
-                      <li>如因天災等不可抗力因素，FUNShare 將主動聯繫延期或退款。</li>
-                      <li>上述時間以消費者進線客服人員表明要取消的時間點為準。</li>
-                      <li>取消收取手續費依四捨五入計算至元。</li>
-                  </ul>
-                  <h5 style="font-size:20px">更改辦法</h5>
-                  <ul>
-                      <li>出發日前 4 日前（不含出發日）可更改日期一次。</li>
-                      <li>改期僅限於同一主辦單位、同價格之相同活動方案，且僅限更改至月曆表上已開放之可預訂時段。經改期後之活動恕不接受取消退費。</li>
-                      <li>出發日前 3 日至當日內不接受更改日期。</li>
-                      <li>如欲更改人數，須至少於出發日前 4 天詢問 FUNShare。</li>
-                      <li>上述時間以消費者向客服提出申請訂單更改之時間點為準。</li>
-                  </ul>
-                  <br>
-              </div>
-              <div>
-                  <br>
-                  <h2 id="location">位置</h2>
-                  <div class="col-md-12">
-                      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3618.403767109375!2d121.30845667611052!3d24.918311442938855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34681906c6ffce35%3A0xe6a6f2910cdf511a!2z6aaZ6I2J6YeO5ZyS!5e0!3m2!1sen!2stw!4v1692098739764!5m2!1sen!2stw" width="600" height="450" style="border:1px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                  </div>
-                  <br>
-              </div>
-              <h2>體驗回饋</h2>
-              <div class="review">
-                  <label>留下您寶貴的意見:</label>
-                  <input type="text" class="form-control justify-content-start align-items-start" style="height: 100px;">
-                  <button class="btn btn-floating ">送出</button>
-              </div>
+                    })
+                    tbody.innerHTML = item.join("");
 
-          </div>
-          <!--左側-->
-          <!--右側-->
-          <div class="col-md-4">
-              <div>
-                  <h2>報名狀況</h2>
-                  <ul class="far fa-circle-check" id="signpStatus">  </ul>
-              </div>
-              <div>
-                  <br>
-                  <h2>繳費狀況</h2>
-                  <ul class="far fa-credit-card" id="paymentStatus"></ul>
-              </div>
-              @*      todo...要想訂單編號邏輯 *@
-              <div>
-                  <br>
-                  <h2 id="order">訂單</h2>
-                  <ul>
-                      <p><i class="fas fa-arrow-right-long"></i>  訂單編號: 20235462124</p>
-                      <p><i class="far fa-user"></i>  人數: 2人</p>
-                  </ul>
-              </div>
-              <div>
-                  <br>
-                  <h2>帳單</h2>
-                  <ul>
-                      <p id="ordertime"></p>
-                      <p>訂單金額: TWD 580</p>
-                      <p>結帳金額: TWD 580</p>
-                      <p>紅利回饋: 580</p>
-                  </ul>
-              </div>
-              <div>
-                  <br>
-                  <h2>課程體驗時間</h2>
-                  <ul id="eventTime"></ul>
-              </div>
-              <div>
-                  <br>
-                  <h2>主辦廠商</h2>
-                  <ul id="supplier"></ul>
-              </div>
-          </div>
-          <!--右側-->
-      </div>
-  </div>
-</div>
-<br />
+                }
+                catch (error) {
+                    alert("An error occurred:", error)
+                }
+            }
 
+            async function orderFuture() {
+                await orderTable(futuretbody, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) >= currentTime);
+            }
 
-@section Scripts{
-  <script>
-      //導入參數orderId
-      const urlParams = new URLSearchParams(window.location.search);
-      const orderId = urlParams.get('orderId');
+            async function orderPast() {
+                await orderTable(pasttbody, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) <= currentTime);
+            }
+            async function orderCanceled() {
+                await orderTable(canceledtbody, data => data.orderStatus === "取消", (data, currentTime) => new Date(data.beginTime) <= currentTime || Date(data.beginTime) > currentTime);
+            }
 
-      //const title = document.querySelector('title')
-      //const div1 = document.querySelector('#div1')
-
-      //fetch 帶入資料
-
-      async function orderDetail() {
-          const response = await fetch(`@Url.Content("~/api/getmyOrderDetail?orderId=")${orderId}`)
-          const datas = await response.json();
-          console.log(datas)
-          //時間格式化
-          const beginTime = new Date(datas[0].beginTime);
-          const endTime = new Date(datas[0].endTime);
-          const ordertime = new Date(datas[0].orderTime);
-
-          document.querySelector("#title").innerHTML = datas[0].productName
-          document.querySelector("#div1").innerHTML = datas[0].features
-          document.querySelector("#img1").innerHTML = `<img src="../img/product/${datas[0].imagePath}"class="d-block w-100" alt="First img" />`
-          document.querySelector("#signpStatus").innerHTML = `    ${datas[0].orderDetailStatus}`
-          document.querySelector("#paymentStatus").innerHTML = `    ${datas[0].orderStatus}`
-          document.querySelector("#ordertime").innerHTML = `訂購時間: ${ordertime.getFullYear()} -${(ordertime.getMonth() + 1).toString().padStart(2, '0')} -${ordertime.getDate().toString().padStart(2, '0')} ${ordertime.getHours().toString().padStart(2, '0')}:${ordertime.getMinutes().toString().padStart(2, '0')}`
-          document.querySelector("#eventTime").innerHTML = `<P> ${beginTime.getFullYear()} -${(beginTime.getMonth() + 1).toString().padStart(2, '0')} -${beginTime.getDate().toString().padStart(2, '0')} ${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')}</P>
-                                                                      <p class="justify-content-center">至</p>
-                                                                    <p>${endTime.getFullYear()} -${(endTime.getMonth() + 1).toString().padStart(2, '0')} -${endTime.getDate().toString().padStart(2, '0')} ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}</p>`
-          document.querySelector("#supplier").innerHTML = `    ${datas[0].supplierName}`
-      }
-
-      orderDetail();
-  </script>
-  <script>
-      //收合script
-      $(function () {
-          $(".flip").click(function () {
-              $(".panel").slideToggle("slow");
-              $(".xs1").toggle();
-              $(".xs2").toggle();
-          });
-      });
-  </script>
-}
-@section Styles{
-  <style>
-      /*         container設計 */
-      .space1 {
-          border: groove;
-          border-color: #F0F0F0;
-          border-radius: 10px;
-          padding: 40px;
-      }
-
-      /*         stepper 設定 */
-      :root {
-          --circle-size: clamp(1.5rem, 5vw, 3rem);
-          --spacing: clamp(0.25rem, 2vw, 0.5rem);
-      }
-
-      .c-stepper {
-          display: flex;
-      }
-
-      .c-stepper__item {
-          display: flex;
-          flex-direction: column;
-          flex: 1;
-          text-align: center;
-          &:before
-
-      {
-          --size: 3rem;
-          content: "";
-          display: block;
-          width: var(--circle-size);
-          height: var(--circle-size);
-          border-radius: 50%;
-          background-color: lightgrey;
-          background-color: #D1E9E9;
-          opacity: 0.5;
-          margin: 0 auto 1rem;
-      }
-
-      &:not(:last-child) {
-          &:after
-
-      {
-          content: "";
-          position: relative;
-          top: calc(var(--circle-size) / 2);
-          width: calc(100% - var(--circle-size) - calc(var(--spacing) * 2));
-          left: calc(50% + calc(var(--circle-size) / 2 + var(--spacing)));
-          height: 2px;
-          background-color: #e0e0e0;
-          order: -1;
-      }
-
-      }
-      }
-
-      .c-stepper__title {
-          font-weight: bold;
-          font-size: clamp(1rem, 4vw, 1.25rem);
-          margin-bottom: 0.5rem;
-      }
-
-      .c-stepper__desc {
-          color: grey;
-          font-size: clamp(0.85rem, 2vw, 1rem);
-          padding-left: var(--spacing);
-          padding-right: var(--spacing);
-      }
-
-      /*** Non-demo CSS ***/
-
-      .wrapper {
-          max-width: 1000px;
-          margin: 2rem auto 0;
-      }
-
-      body {
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-          padding: 1rem;
-      }
-
-      *,
-      *:before,
-      *:after {
-          box-sizing: border-box;
-      }
-      /*         stepper 設定 */
-
-      /*         標題下目錄頁 */
-      .menu {
-          width: 100%;
-          overflow: auto;
-          background-color: #F0F0F0;
-          border-radius: 5px;
-          list-style-type: none;
-      }
-
-          .menu li {
-              width: 10em;
-              line-height: 4em;
-              float: left;
-          }
-
-              .menu li a {
-                  display: block;
-                  text-align: center;
-                  color: #000000;
-                  font-size: 20px;
-              }
-
-                  .menu li a:link {
-                      text-decoration: none;
-                  }
-
-                  .menu li a:hover {
-                      background-color: #eaeaea;
-                      color: #121212;
-                      border-radius: 5px;
-                  }
-      /*                     收合 */
-      .flip {
-          margin: 0px;
-          padding: 5px;
-          /*             text-align: center; */
-          /*            border:dashed;
-                  border-block-color:black;
-                  border-width:thin; */
-          cursor: pointer;
-      }
-
-      .panel {
-          margin: 0px;
-          padding: 5px;
-          /*       border: dashed;
-                  border-block-color: black;
-                  border-width: thin; */
-          /*       text-align: center; */
-          display: none;
-      }
-  </style>
-}
+            (async () => {
+                const currentTime = await getCurrentServerTime();
+                currentTimeElement.textContent = currentTime.toISOString();
+                await orderFuture();
+                await orderPast();
+                await orderCanceled();
+            })();
 
 
 
+        </script>
+
+        <script>
+            //orderDetail
+            function showOrderDetail(orderId) {
+                window.location.href = `@Url.Content("~/Customer/myOrderDetail?orderId=")` + orderId;
+            }
+        </script>
+        <script>
+            /* 課表 */
+
+
+            const date = new Date();
+
+            const renderCalendar = () => {
+
+
+                date.setDate(1);
+
+                const monthDays = document.querySelector(".days");
+
+
+                const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+
+                const prevLastDay = new Date(date.getFullYear(), date.getMonth(), 0).getDate()
+
+
+
+                const firstDayIndex = date.getDay();
+
+                const lastDayIndex = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDay()
+
+                console.log(lastDayIndex)
+                const nextDays = 7 - lastDayIndex - 1;
+
+
+
+                const months = [
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December",
+                ];
+                document.querySelector(".date h1").innerHTML = months[date.getMonth()];
+
+                document.querySelector('.date p').innerHTML = new Date().toDateString();
+
+                let days = "";
+                let scan = [];
+
+                for (let x = firstDayIndex; x > 0; x--) {
+                    let pick = date.getFullYear() + '-' + (date.getMonth().toString().padStart(2, '0')) + '-' + (prevLastDay - x + 1);
+                    days += `<div class="prev-date flip" data-id="${pick}">${prevLastDay - x + 1}</div>`
+                    scan.push(pick)
+                    // const d = new Date(pick).toISOString();
+                    // schedule(d);
+                    console.log(scan)
+                }
+
+
+                for (let i = 1; i <= lastDay; i++) {
+                    if (i === new Date().getDate() && date.getMonth() === new Date().getMonth()) {
+                        let pick = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + i;
+                        days += `<div class="today flip" data-id="${pick}" id="${pick}">${i}</div>`;
+                        scan.push(pick)
+                        // const d = new Date(pick).toISOString();
+                        // schedule(d);
+                    }
+                    else {
+                        let pick = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + i;
+                        days += `<div class="flip" data-id="${pick}" id="${pick}">${i}</div>`;
+                        scan.push(pick)
+                        // const d = new Date(pick).toISOString();
+                        // schedule(d);
+                    }
+                }
+
+                for (let j = 1; j <= nextDays; j++) {
+                    let pick = date.getFullYear() + '-' + (date.getMonth() + 2).toString().padStart(2, '0') + '-' + j;
+                    days += `<div class="next-date flip" data-id="${pick}" id="${pick}">${j}</div>`
+                    scan.push(pick)
+                    // const d = new Date(pick).toISOString();
+                    // schedule(d);
+                }
+                monthDays.innerHTML = days;
+                for (let i = 0; i < scan.length; i++) {
+                    let d = scan[i]
+                    d = new Date(d).toISOString();
+                    schedule(d, scan[i]);
+                }
+
+            }
+
+            document.querySelector('.prev').addEventListener('click', () => {
+                date.setMonth(date.getMonth() - 1);
+                renderCalendar();
+                flip();
+            });
+
+            document.querySelector('.next').addEventListener('click', () => {
+                date.setMonth(date.getMonth() + 1);
+                console.log(this)
+                renderCalendar();
+                flip();
+            });
+
+            renderCalendar();
+            flip();
+            //收合script
+            let x = 0;
+            let clicked = false;
+            function flip() {
+                $('.flip').click(function () {
+                    if (!clicked) {
+                        console.log(this)
+                        $(".schedule").slideToggle("slow");
+                        x = $(this).data().id
+                        const date = new Date(x).toISOString();
+                        console.log(date)
+                        console.log(x)
+                        $(".schedule h1").html(x + ' schedule')
+                        // if (x === '2023-08-26') {
+                        $('#list').empty()
+                        //$('#list').append(`<li>${x}</li>`)
+                        getcourses(date);
+                        // }
+                        clicked = true
+                    }
+                    else {
+                        if ($(this).data().id === x) {
+                            $(".schedule").slideToggle("slow");
+
+                            clicked = false;
+                        }
+                        else {
+                            x = $(this).data().id
+                            const date = new Date(x).toISOString();
+                            $('#list').empty()
+                            $(".schedule h1").html(x + ' schedule')
+                            //$('#list').append(`<li>${x}</li>`)
+                            getcourses(date);
+                            clicked = true;
+                        }
+                    }
+                })
+            };
+
+            //暫時 todo....
+
+            const t = new Date().toISOString(); // Get current date and time in the required format
+
+
+            //$(document).ready(function () {
+            //    getcourses();
+            //    console.log(t)
+            //});
+
+            async function getcourses(date) {
+                let response = await fetch(`@Url.Content("~/api/getCourses?id=8")&date=${date}`)
+                console.log(response)
+
+                let datas = await response.json();
+                const filteredData = datas.filter(data =>
+                    data.productId !== null && data.orderStatus !== "取消");
+
+                let item = filteredData.map(data => {
+                    const beginTime = new Date(data.beginTime);
+                    const endTime = new Date(data.endTime);
+                    return (
+                        `<li>${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')} 至
+                                                                        ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')} <br>
+                                                                                   ${data.productName}
+                                                </li><br>
+                            `
+                    )
+                })
+                console.log(item)
+                item = item.join("")
+                $('#list').append(`${item}`)
+                    ;
+            }
+
+            async function schedule(date, pick) {
+
+                let response = await fetch(`@Url.Content("~/api/getCourses?id=8")&date=${date}`)
+                console.log(response)
+
+                let datas = await response.json();
+                const filteredData = datas.filter(data =>
+                    data.productId !== null && data.orderStatus !== "取消");
+
+                if (filteredData.length > 0) {
+                    $(`#${pick}`).css({
+                        "color": "white",
+                        "background-color": "#73BF00",
+                        "font-family": "Arial",
+                        "font-size": "20px",
+                        "padding": "5px"
+                    });
+                }
+                // let item = filteredData.map(data => {
+                //     const beginTime = new Date(data.beginTime);
+                //     const endTime = new Date(data.endTime);
+                //     return (
+                //         `<li>${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')} 至
+                //                                                             ${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')} <br>
+                //                                                                        ${data.productName}
+                //                                     </li><br>
+                //                 `
+                //     )
+                // })
+                // console.log(item)
+                // item = item.join("")
+
+                // // $('#list').append(`${item}`)
+                //     ;
+            }
+
+        </script>
+
+        <script>
+            async function orderCard(tbody, conditionSatus, conditionTime) {
+
+                try {
+                    const currentTime = new Date(currentTimeElement.textContent); // Get current time from the stored element's content
+
+                    let response = await fetch('@Url.Content("~/api/getmyOrderDetail")')
+                    let datas = await response.json()
+                    console.log(datas)
+
+                    const filteredData = datas.filter(data =>
+                        data.productId != null && conditionSatus(data) /* data.orderStatus !== "取消"  */ && conditionTime(data, currentTime)
+                    );
+                    const item = filteredData.map(data => {
+                        //時間格式化
+                        const beginTime = new Date(data.beginTime);
+                        const endTime = new Date(data.endTime);
+                        //價格格式化
+                        const unitPrice = data.unitPrice;
+                        const formattedUnitPrice = new Intl.NumberFormat('zh-TW', {
+                            style: 'currency',
+                            currency: 'TWD',
+                            currencyDisplay: 'symbol',
+                            maximumFractionDigits: 0
+                        }).format(unitPrice);
+                        return (
+
+                            `
+                                                      <div class="col">
+                                        <div class="card" onclick="showOrderDetail('${data.orderId}')" >
+                                          <img src="@Url.Content("~/img/product/")${data.imagePath}" class="card-img-top" alt="Hollywood Sign on The Hill"/>
+                              <div class="card-body">
+                                            <h5 class="card-title">${data.productName}</h5>
+                                <p class="card-text">
+                                              ${data.features}
+                                </p>
+                                                        <p class="card-text d-flex justify-content-between">
+                                                          <small class="text-muted">${data.supplierName}</small>
+                                                                                              <small class="text-muted">${beginTime.getFullYear()} -${(beginTime.getMonth() + 1).toString().padStart(2, '0')} -${beginTime.getDate().toString().padStart(2, '0')} ${beginTime.getHours().toString().padStart(2, '0')}:${beginTime.getMinutes().toString().padStart(2, '0')} </small>
+                                </p>
+
+
+                              </div>
+                            </div>
+                          </div>
+
+                                                    `
+                        )
+
+                    })
+                    tbody.innerHTML = item.join("");
+
+                }
+                catch (error) {
+                    alert("An error occurred:", error)
+                }
+            }
+            async function orderFutureCard() {
+                await orderCard(courseCurrent, data => data.orderStatus !== "取消", (data, currentTime) => new Date(data.beginTime) >= currentTime);
+            }
+
+            (async () => {
+                const currentTime = await getCurrentServerTime();
+                currentTimeElement.textContent = currentTime.toISOString();
+                await orderFutureCard();
+
+            })();
+
+        </script>
+    }
+
+    @section Styles{
+        <style>
+            .calendar {
+                width: 45rem;
+                height: 52rem;
+                background-color: #e3dcdc;
+                box-shadow: 0 0.5rem 3rem rgba(0,0,0,0.4);
+            }
+
+            .month {
+                width: 100%;
+                height: 12rem;
+                background-color: #d2dad7;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 2rem;
+                text-align: center;
+                text-shadow: 0 0.3rem o.5rem rgba(0,0,0,0.5);
+            }
+
+                .month i {
+                    font-size: 2.5rem;
+                    cursor: pointer;
+                }
+
+                .month h1 {
+                    font-size: 3rem;
+                    font-weight: 400;
+                    text-transform: uppercase;
+                    letter-spacing: 0.2rem;
+                    margin-bottom: 1rem;
+                }
+
+                .month p {
+                    font-size: 1.6rem;
+                }
+
+            .weekdays {
+                width: 100%;
+                height: 5rem;
+                padding: 0 0.4rem;
+                display: flex;
+                align-items: center;
+            }
+
+                .weekdays div {
+                    font-size: 1.5rem;
+                    font-weight: 400;
+                    letter-spacing: 0.1rem;
+                    width: calc(44.2rem/7);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-shadow: 0 0.3rem 0.5rem rgba(0,0,0,0.5);
+                }
+
+            .days {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                padding: 0.2rem
+            }
+
+                .days div {
+                    font-size: 1.4rem;
+                    margin: 0.3rem;
+                    width: calc(40.2rem/7);
+                    height: 5rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-shadow: 0 0.3rem 0.5rem rgba(0,0,0,0.5);
+                    transition: backgrouod-color 0.2s;
+                }
+
+                    .days div:hover:not(.today) {
+                        background-color: #262626;
+                        border: 0.2rem solid #777;
+                        cursor: pointer;
+                    }
+
+            .prev-date,
+            .next-date {
+                opacity: 0.5;
+            }
+
+            .today {
+                background-color: #94aaa2;
+            }
+
+
+            .schedule {
+                width: 45rem;
+                height: 52rem;
+                background-color: #e1dfe1;
+                box-shadow: 0 0.3rem 3rem rgba(0,0,0,0.3);
+                display: none;
+            }
+
+            .title {
+                width: 100%;
+                height: 12rem;
+                background-color: #9ba7a3;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 2rem;
+                text-align: center;
+                text-shadow: 0 0.3rem o.5rem rgba(0,0,0,0.5);
+            }
+
+                .title h1 {
+                    font-size: 3rem;
+                    font-weight: 400;
+                    text-transform: uppercase;
+                    letter-spacing: 0.2rem;
+                    margin-bottom: 1rem;
+                }
+
+            .list {
+                margin-left: 2rem;
+                margin-top: 1.8rem;
+                padding-left: 3rem;
+            }
+
+                .list li {
+                    font-size: 1rem;
+                    font-weight: 400;
+                    letter-spacing: 0.1rem;
+                    height: calc(38rem/9);
+                    text-shadow: 0 0.3rem 0.5rem rgba(0,0,0,0.5);
+                }
+
+            .time {
+                height: 5rem;
+                padding: 0 0.4rem;
+                align-items: center;
+            }
+
+                .time div {
+                    font-size: 1.5rem;
+                    font-weight: 400;
+                    letter-spacing: 0.1rem;
+                    height: calc(38rem/9);
+                    text-shadow: 0 0.3rem 0.5rem rgba(0,0,0,0.5);
+                }
+        </style>
+    }
+
+    <!-- MDB -->
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+</body> *@
