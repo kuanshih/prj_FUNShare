@@ -37,10 +37,6 @@ public partial class Supplier
 
     public virtual ICollection<AdvertiseOrder> AdvertiseOrder { get; set; } = new List<AdvertiseOrder>();
 
-    public virtual ICollection<Chat> ChatChatMessengerNavigation { get; set; } = new List<Chat>();
-
-    public virtual ICollection<Chat> ChatReceiverNavigation { get; set; } = new List<Chat>();
-
     public virtual City City { get; set; }
 
     public virtual ICollection<Product> Product { get; set; } = new List<Product>();

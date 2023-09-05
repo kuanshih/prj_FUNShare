@@ -224,33 +224,12 @@ public partial class FUNShareContext : DbContext
 
         modelBuilder.Entity<Chat>(entity =>
         {
-            entity.HasKey(e => e.ChatRoomId);
+            entity.HasKey(e => e.ChatMessengerId);
 
-            entity.Property(e => e.ChatRoomId).HasColumnName("ChatRoomID");
             entity.Property(e => e.ChatMessengerId).HasColumnName("ChatMessengerID");
             entity.Property(e => e.MessageCreateTime).HasColumnType("datetime");
             entity.Property(e => e.ReceiverId).HasColumnName("ReceiverID");
             entity.Property(e => e.SenderId).HasColumnName("SenderID");
-
-            entity.HasOne(d => d.ChatMessenger).WithMany(p => p.ChatChatMessenger)
-                .HasForeignKey(d => d.ChatMessengerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Chat_Customer_Infomation");
-
-            entity.HasOne(d => d.ChatMessengerNavigation).WithMany(p => p.ChatChatMessengerNavigation)
-                .HasForeignKey(d => d.ChatMessengerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Chat_Supplier");
-
-            entity.HasOne(d => d.Receiver).WithMany(p => p.ChatReceiver)
-                .HasForeignKey(d => d.ReceiverId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Chat_Customer_Infomation1");
-
-            entity.HasOne(d => d.ReceiverNavigation).WithMany(p => p.ChatReceiverNavigation)
-                .HasForeignKey(d => d.ReceiverId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Chat_Supplier1");
         });
 
         modelBuilder.Entity<City>(entity =>

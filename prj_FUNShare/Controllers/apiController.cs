@@ -142,6 +142,45 @@ namespace prj_FUNShare.Controllers
 
         }
 
+
+        public IActionResult getmyOrderDetail2(int? orderId)
+        {
+            int id = 8;
+            // 判斷是否登入
+            //if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            //{
+            //    string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            //    CustomerInfomation customer = JsonSerializer.Deserialize<CustomerInfomation>(json);
+            //    id = customer.MemberId;
+            //}
+            var datas = _context.OrderDetail
+                .Include(x => x.Order)
+                .Where(orderDetail => orderDetail != null && orderDetail.Order.MemberId == id && orderDetail.OrderId == orderId)
+            .Select(orderDetail => new COrderItmeVIewModel
+            {
+                orderId = orderDetail.OrderId,
+                MemberId = id,
+                ProductId = orderDetail.ProductDetail.ProductId,
+                ProductName = orderDetail.ProductDetail.Product.ProductName,
+                Features = string.IsNullOrEmpty(orderDetail.ProductDetail.Product.Features) ? orderDetail.ProductDetail.Product.ProductIntro : orderDetail.ProductDetail.Product.Features,
+                CategoryId = orderDetail.ProductDetail.Product.ProductCategories.First().SubCategory.CategoryId,
+                CategoryName = orderDetail.ProductDetail.Product.ProductCategories.First().SubCategory.Category.CategoryName,
+                CityName = orderDetail.ProductDetail.District.City.CityName,
+                SupplierName = orderDetail.ProductDetail.Product.Supplier.SupplierName,
+                OrderTime = orderDetail.Order.OrderTime,
+                beginTime = orderDetail.ProductDetail.BeginTime,
+                endTime = orderDetail.ProductDetail.EndTime,
+                _UnitPrice = (int)orderDetail.ProductDetail.UnitPrice,
+                OrderStatus = orderDetail.Order.Status.Description,
+                OrderDetailStatus = orderDetail.Status.Description,
+                ImagePath = orderDetail.ProductDetail.Product.ImageList.First().ImagePath,
+                Address = orderDetail.ProductDetail.Address,
+                districtName = orderDetail.ProductDetail.District.DistrictName,
+                isAttend = orderDetail.IsAttend,
+                count = orderDetail.Order.Count,
+            });
+            return Json(datas);
+        }
         public IActionResult now()
         {
             // Get current server time

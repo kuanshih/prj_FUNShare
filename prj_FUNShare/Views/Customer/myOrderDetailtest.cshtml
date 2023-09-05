@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewData["Title"] = "myOrderDetailtest";
+}
+
+<h1>myOrderDetailtest</h1>
+
+@section Scripts{
+    <script>
+        async function orderDetail() {
+            const response = await fetch(`@Url.Content("~/api/getmyOrderDetail2?orderId=")1`)
+            const datas = await response.json();
+            console.log(datas);
+        }
+        orderDetail();
+
+    </script>
+}

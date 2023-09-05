@@ -7,8 +7,6 @@ namespace prj_FUNShare.Models;
 
 public partial class Chat
 {
-    public int ChatRoomId { get; set; }
-
     public int ChatMessengerId { get; set; }
 
     public int ReceiverId { get; set; }
@@ -18,12 +16,4 @@ public partial class Chat
     public string MessageContent { get; set; }
 
     public DateTime? MessageCreateTime { get; set; }
-
-    public virtual CustomerInfomation ChatMessenger { get; set; }
-
-    public virtual Supplier ChatMessengerNavigation { get; set; }
-
-    public virtual CustomerInfomation Receiver { get; set; }
-
-    public virtual Supplier ReceiverNavigation { get; set; }
 }

@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewData["Title"] = "myChat";
+}
+
+<h1>myChat</h1>
+
+<div class="row">
+    <div class="col-8">
+        <h4>個人 ID: <span id="SelfID"><input type="text" class="form-control" id="senderIdInput"></span></h4>
+        <div class="mb-3">
+            <label for="message" class="form-label">發送訊息</label>
+            <input type="text" class="form-control" id="messageInput">
+        </div>
+        <div class="mb-3">
+            <label for="sendToID" class="form-label">指定 ID</label>
+            <input type="text" class="form-control" id="receiverIdInput">
+        </div>
+        <button type="button" class="btn btn-primary" id="sendButton">傳送訊息</button>
+    </div>
+    <div class="col-4">
+        <h4>連線 ID 列表</h4>
+        <ul class="list-group" id="IDList">
+        </ul>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <h3>聊天內容</h3>
+        <ul class="list-group" id="Content">
+        </ul>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script>
+        function generateRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // 生成隨機數字並設定到 senderIdInput
+        // const randomNumber = generateRandomNumber(1, 100);
+        // $("#senderIdInput").val(randomNumber);
+        // console.log($("#senderIdInput").val())
+
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+        let btnSentMessage = document.querySelector("#sendButton");
+
+
+        //這邊才是開始連線
+        connection.start().then(() => {
+            const connectionId = connection.connectionId;
+            const senderId = generateRandomNumber(1, 100);
+            $("#senderIdInput").val(senderId);
+            console.log("SignalR Connected. Connection ID: " + connectionId);
+            // 呼叫後端的 UpdateUserInfo 方法，傳遞 accountId 和 connectionId
+            connection.invoke('UpdateUserInfo', senderId, connectionId);
+        }).catch(err => { console.error(err); setTimeout(start, 5000); });
+
+
+        //這邊是等待後端有傳訊息說要執行的方法
+        //像是後端跑到了await Clients.Client(connectionId).SendAsync("ReceiveMessage", senderId, message);
+        //他呼叫符合connectionId條件的client執行ReceiveMessage這個名稱的方法
+        connection.on("ReceiveMessage", function (senderId, message) {
+            console.log("這裡是ReceiveMessage，你接收到訊息會在下面印出:");
+            console.log(message);
+            console.log(senderId);
+            // 處理訊息的顯示等操作
+            //loadUser();
+        });
+
+        //這邊是執行的話會呼喚後端，叫他執行invoke後面的方法
+        //如果後面還有想要處理的事情可以再接個.then()讓他做其他事情
+        btnSentMessage.addEventListener('click', () => {//按下畫面上按鈕的事件
+            const message = messageInput.value; // 取得使用者輸入的訊息
+            const senderId = senderIdInput.value;
+            const receiverId = receiverIdInput.value;
+   
+            if (message.trim() !== "") {//如果message移除空白後也不為空的話
+                // 呼叫 SendPrivateMessage 方法傳送訊息
+                connection.invoke('SendPrivateMessage', parseInt(senderId), parseInt(receiverId), message)
+                    .catch(err => console.error(err)).then(() => {
+                        // loadUser();
+                        messageInput.value = '';
+                        // keepDown();
+                        console.log("監看傳訊有沒有成功btn");
+                    });
+            }
+        })
+    </script>
+}

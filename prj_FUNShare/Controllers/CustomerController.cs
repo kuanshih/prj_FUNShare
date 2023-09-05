@@ -150,5 +150,14 @@ namespace prj_FUNShare.Controllers
         {
             return View();
         }
+        public IActionResult myOrderDetailtest()
+        {
+            return View();
+        }
+
+        public IActionResult myChat()
+        {
+            return View();
+        }
     }
 }
