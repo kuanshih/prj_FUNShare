@@ -40,12 +40,6 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        // 生成隨機數字並設定到 senderIdInput
-        // const randomNumber = generateRandomNumber(1, 100);
-        // $("#senderIdInput").val(randomNumber);
-        // console.log($("#senderIdInput").val())
-
-
         var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
         let btnSentMessage = document.querySelector("#sendButton");
 
